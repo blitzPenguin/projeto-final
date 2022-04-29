@@ -1,0 +1,3 @@
+import mainwindow
+
+mainwindow.Mainwindow()
