@@ -1,5 +1,5 @@
 from tkinter import *
-import windowConstructor
+import windowconstructor
 import functions
 
 
@@ -17,9 +17,9 @@ class Mainwindow:
         window.resizable(width=TRUE, height=TRUE)
 
         # Barra Topo
-        windowConstructor.createBar(window)
+        windowconstructor.createBar(window)
         # Frame Principal
-        framePrincipal = windowConstructor.createFrames(
+        framePrincipal = windowconstructor.createFrames(
             window,
             color='blue',
         )
@@ -39,19 +39,19 @@ class Mainwindow:
         )
 
         # Frames secundárias
-        frameButtons = windowConstructor.createFrames(
+        frameButtons = windowconstructor.createFrames(
             framePrincipal,
             color='green',
         )
-        frameList = windowConstructor.createFrames(
+        frameList = windowconstructor.createFrames(
             framePrincipal,
             color='yellow',
         )
-        frameSearch = windowConstructor.createFrames(
+        frameSearch = windowconstructor.createFrames(
             framePrincipal,
             color='red',
         )
-        frameSearchList = windowConstructor.createFrames(
+        frameSearchList = windowconstructor.createFrames(
             framePrincipal,
             color='orange'
         )
@@ -77,14 +77,14 @@ class Mainwindow:
             frameButtons.grid_columnconfigure(j, weight=1)
 
         # Lista Requisiões
-        labelDelivery = windowConstructor.createLabel(
+        labelDelivery = windowconstructor.createLabel(
             frameList,
             text='Entregas pendentes para hoje:'
         )
         labelDelivery.pack(
             anchor=N,
         )
-        listDelivery = windowConstructor.createList(frameList)
+        listDelivery = windowconstructor.createList(frameList)
         listDelivery.pack(
             anchor=CENTER,
             expand=True,
@@ -92,10 +92,10 @@ class Mainwindow:
         )
 
         # Entrada de procuras
-        entrySearch = windowConstructor.createEntry(
+        entrySearch = windowconstructor.createEntry(
             frameSearch,
         )
-        buttonSearch = windowConstructor.createButton(
+        buttonSearch = windowconstructor.createButton(
             frameSearch,
             text='Pesquisar Livro',
         )
@@ -112,7 +112,7 @@ class Mainwindow:
         )
 
         # Entrada de lista de procuras
-        listSearch = windowConstructor.createList(
+        listSearch = windowconstructor.createList(
             frameSearchList,
         )
         listSearch.pack(
@@ -120,11 +120,11 @@ class Mainwindow:
         )
 
         # Butões
-        buttonAdd = windowConstructor.createButton(
+        buttonAdd = windowconstructor.createButton(
             frameButtons,
             text='Adicionar Requisição',
         )
-        buttonDeliver = windowConstructor.createButton(
+        buttonDeliver = windowconstructor.createButton(
             frameButtons,
             text='Entregar Livro',
         )
