@@ -1,7 +1,10 @@
+from curses import window
 from tkinter import *
 import functions
 
 # Criação de barra de topo
+
+
 def createBar(master):
     menubar = Menu(master)
     master.config(menu=menubar)
@@ -19,7 +22,7 @@ def createBar(master):
     )
     fileMenu.add_command(
         label='Acrescentar Livro',
-        command=lambda: functions.acrescentarLivro(),
+        command=lambda: functions.acrescentarLivro(self=window),
     )
     fileMenu.add_command(
         label='Remover Livro',
@@ -43,10 +46,12 @@ def createBar(master):
     )
     editMenu.add_command(
         label='Paste',
-        command=functions.paste,
+        command=lambda: functions.paste(self=window),
     )
 
 # Criação de frames
+
+
 def createFrames(master, **kwargs):
     frame = Frame(
         master,
@@ -60,6 +65,8 @@ def createFrames(master, **kwargs):
     return frame
 
 # Criar Butões
+
+
 def createButton(master, **kwargs):
     button = Button(
         master,
@@ -74,6 +81,8 @@ def createButton(master, **kwargs):
     return button
 
 # Criação de labels
+
+
 def createLabel(master, **kwargs):
     label = Label(
         master,
@@ -85,6 +94,8 @@ def createLabel(master, **kwargs):
     return label
 
 # Criar Caixa de Texto
+
+
 def createEntry(master, **kwargs):
     entry = Entry(
         master,
@@ -93,6 +104,8 @@ def createEntry(master, **kwargs):
     return entry
 
 # Criar Lista
+
+
 def createList(master):
     list = Listbox(
         master,
