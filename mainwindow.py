@@ -1,140 +1,223 @@
 from tkinter import *
 import windowconstructor
-import functions
+import addbookwindow
+import removewindow
 
 
 class Mainwindow:
 
+    # Funções
+    def acrescentarLivro():
+        addbookwindow.Addwindow()
+
+    def removerLivro():
+        removewindow.RemoveWindow()
+
+    def copy():
+        pass
+
+    def cut():
+        pass
+
+    def paste():
+        pass
+
     # Função construtora
+
     def __init__(self):
+
         # Window
         window = Tk()
-        window.minsize(800, 600)
-        if window.winfo_screenmmheight() >= 768:
-            window.geometry('1024x768')
+        window.title('Biblioteca Escolar')
+        window.minsize(
+            1024,
+            768
+        )
+        if window.winfo_screenheight() >= 900:
+            window.geometry(
+                '1200x900'
+            )
         else:
-            window.geometry('800x600')
-        window.resizable(width=TRUE, height=TRUE)
+            window.geometry(
+                '1024x768'
+            )
+        window.resizable(
+            width=TRUE,
+            height=TRUE
+        )
 
         # Barra Topo
-        windowconstructor.createBar(window)
+        windowconstructor.createBar(
+            window
+        )
+
         # Frame Principal
         framePrincipal = windowconstructor.createFrames(
             window,
-            color='blue',
+            color='blue'
+        )
+        framePrincipal.pack(
+            fill=BOTH,
+            expand=TRUE
+        )
+
+        # Frame Logotipo
+        frameLogotipo = windowconstructor.createFrames(
+            framePrincipal,
+            color='light blue'
+        )
+        frameLogotipo.pack(
+            side=TOP,
+            expand=TRUE,
+            fill=BOTH
         )
 
         # Label logótipo
-        logotipo = PhotoImage(file='./imagens/arcor-logo-5.png')
+        logotipo = PhotoImage(
+            file='./imagens/arcor-logo-5.png'
+        )
         logotipoLabel = Label(
-            framePrincipal,
+            frameLogotipo,
             image=logotipo,
-            height=120,
+            height=120
         )
         logotipoLabel.pack(
             side=TOP,
             expand=TRUE,
             fill=BOTH,
-            anchor=CENTER,
+            anchor=CENTER
         )
 
-        # Frames secundárias
-        frameButtons = windowconstructor.createFrames(
+        # Frame Lista Entregas Pendentes / Atrasadas
+        frameDelivery = windowconstructor.createFrames(
             framePrincipal,
-            color='green',
+            color='yellow'
         )
-        frameList = windowconstructor.createFrames(
-            framePrincipal,
-            color='yellow',
-        )
-        frameSearch = windowconstructor.createFrames(
-            framePrincipal,
-            color='red',
-        )
-        frameSearchList = windowconstructor.createFrames(
-            framePrincipal,
-            color='orange'
-        )
-        framePrincipal.pack(
-            fill=BOTH,
-            expand=TRUE,
-        )
-        frameList.pack(
-            fill=BOTH,
-        )
-        frameSearch.pack(
-            fill=BOTH,
-        )
-        frameSearchList.pack(
+        frameDelivery.pack(
             fill=BOTH
         )
-        frameButtons.pack(
-            anchor=CENTER,
-            side=BOTTOM,
-            fill=X,
-        )
         for j in range(2):
-            frameButtons.grid_columnconfigure(j, weight=1)
+            frameDelivery.grid_columnconfigure(
+                j,
+                weight=1
+            )
 
-        # Lista Requisiões
-        labelDelivery = windowconstructor.createLabel(
-            frameList,
+        # Lista Entregas Pendentes
+        labelPending = windowconstructor.createLabel(
+            frameDelivery,
             text='Entregas pendentes para hoje:'
         )
-        labelDelivery.pack(
-            anchor=N,
+        labelPending.grid(
+            row=0,
+            column=0,
+            sticky=N
         )
-        listDelivery = windowconstructor.createList(frameList)
-        listDelivery.pack(
-            anchor=CENTER,
-            expand=True,
-            fill=BOTH,
+        listPending = windowconstructor.createList(
+            frameDelivery
+        )
+        listPending.grid(
+            row=1,
+            column=0,
+            sticky=NSEW
         )
 
-        # Entrada de procuras
+        # Lista Entregas Atrasadas
+        labelBehind = windowconstructor.createLabel(
+            frameDelivery,
+            text='Entregas em atraso:'
+        )
+        labelBehind.grid(
+            row=0,
+            column=1,
+            sticky=N
+        )
+        listBehind = windowconstructor.createList(
+            frameDelivery
+        )
+        listBehind.grid(
+            row=1,
+            column=1,
+            sticky=NSEW
+        )
+
+        # Frame de  Entrada de Procuras
+        frameSearch = windowconstructor.createFrames(
+            framePrincipal,
+            color='red'
+        )
+        frameSearch.pack(
+            fill=BOTH
+        )
+
+        # Entrada de Procuras
         entrySearch = windowconstructor.createEntry(
-            frameSearch,
+            frameSearch
         )
         buttonSearch = windowconstructor.createButton(
             frameSearch,
-            text='Pesquisar Livro',
+            text='Pesquisar Livro'
         )
         entrySearch.pack(
             side=LEFT,
             anchor=NW,
             fill=X,
-            expand=TRUE,
+            expand=TRUE
         )
         buttonSearch.pack(
             side=LEFT,
             anchor=NE,
-            expand=FALSE,
+            expand=FALSE
         )
 
-        # Entrada de lista de procuras
+        # Frame Lista de Procuras
+        frameSearchList = windowconstructor.createFrames(
+            framePrincipal,
+            color='orange'
+        )
+        frameSearchList.pack(
+            fill=BOTH
+        )
+
+        # Lista de Procuras
         listSearch = windowconstructor.createList(
-            frameSearchList,
+            frameSearchList
         )
         listSearch.pack(
-            fill=X,
+            fill=X
         )
 
-        # Butões
+        # Frame Botões
+        frameButtons = windowconstructor.createFrames(
+            framePrincipal,
+            color='green'
+        )
+        frameButtons.pack(
+            anchor=CENTER,
+            side=BOTTOM,
+            fill=X
+        )
+        for j in range(2):
+            frameButtons.grid_columnconfigure(
+                j,
+                weight=1
+            )
+
+        # Botões
         buttonAdd = windowconstructor.createButton(
             frameButtons,
-            text='Adicionar Requisição',
+            text='Adicionar Requisição'
         )
         buttonDeliver = windowconstructor.createButton(
             frameButtons,
-            text='Entregar Livro',
+            text='Entregar Livro'
         )
         buttonAdd.grid(
             row=0,
-            column=0,
+            column=0
         )
         buttonDeliver.grid(
             row=0,
-            column=1,
+            column=1
         )
 
         window.mainloop()

@@ -1,6 +1,5 @@
-from curses import window
 from tkinter import *
-import functions
+import mainwindow
 
 # Criação de barra de topo
 
@@ -22,11 +21,11 @@ def createBar(master):
     )
     fileMenu.add_command(
         label='Acrescentar Livro',
-        command=lambda: functions.acrescentarLivro(self=window),
+        command=lambda: mainwindow.Mainwindow.acrescentarLivro(),
     )
     fileMenu.add_command(
         label='Remover Livro',
-        command=functions.removerLivro,
+        command=lambda: mainwindow.Mainwindow.removerLivro(),
     )
     fileMenu.add_command(
         label='Sair',
@@ -38,15 +37,15 @@ def createBar(master):
     )
     editMenu.add_command(
         label='Copy',
-        command=functions.copy,
+        command=lambda: mainwindow.Mainwindow.copy(),
     )
     editMenu.add_command(
         label='Cut',
-        command=functions.cut,
+        command=lambda: mainwindow.Mainwindow.cut(),
     )
     editMenu.add_command(
         label='Paste',
-        command=lambda: functions.paste(self=window),
+        command=lambda: mainwindow.Mainwindow.paste(),
     )
 
 # Criação de frames
@@ -77,6 +76,10 @@ def createButton(master, **kwargs):
         button.config(
             text=kwargs['image'],
             compound=TOP,
+        )
+    if 'command' in kwargs:
+        button.config(
+            command=kwargs['command']
         )
     return button
 
