@@ -1,52 +1,6 @@
 from tkinter import *
 import mainwindow
 
-# Criação de barra de topo
-
-
-def createBar(master):
-    menubar = Menu(master)
-    master.config(menu=menubar)
-    fileMenu = Menu(
-        menubar,
-        tearoff=0,
-    )
-    editMenu = Menu(
-        menubar,
-        tearoff=0,
-    )
-    menubar.add_cascade(
-        label='File',
-        menu=fileMenu,
-    )
-    fileMenu.add_command(
-        label='Acrescentar Livro',
-        command=lambda: mainwindow.Mainwindow.acrescentarLivro(),
-    )
-    fileMenu.add_command(
-        label='Remover Livro',
-        command=lambda: mainwindow.Mainwindow.removerLivro(),
-    )
-    fileMenu.add_command(
-        label='Sair',
-        command=quit,
-    )
-    menubar.add_cascade(
-        label='Edit',
-        menu=editMenu,
-    )
-    editMenu.add_command(
-        label='Copy',
-        command=lambda: mainwindow.Mainwindow.copy(),
-    )
-    editMenu.add_command(
-        label='Cut',
-        command=lambda: mainwindow.Mainwindow.cut(),
-    )
-    editMenu.add_command(
-        label='Paste',
-        command=lambda: mainwindow.Mainwindow.paste(),
-    )
 
 # Criação de frames
 

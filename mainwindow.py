@@ -7,10 +7,10 @@ import removewindow
 class Mainwindow:
 
     # Funções
-    def acrescentarLivro():
+    def acrescentarLivro(self):
         addbookwindow.Addwindow()
 
-    def removerLivro():
+    def removerLivro(self):
         removewindow.RemoveWindow()
 
     def copy():
@@ -23,7 +23,6 @@ class Mainwindow:
         pass
 
     # Função construtora
-
     def __init__(self):
 
         # Window
@@ -47,8 +46,47 @@ class Mainwindow:
         )
 
         # Barra Topo
-        windowconstructor.createBar(
-            window
+        menubar = Menu(window)
+        window.config(menu=menubar)
+        fileMenu = Menu(
+            menubar,
+            tearoff=0,
+        )
+        editMenu = Menu(
+            menubar,
+            tearoff=0,
+        )
+        menubar.add_cascade(
+            label='File',
+            menu=fileMenu,
+        )
+        fileMenu.add_command(
+            label='Acrescentar Livro',
+            command=lambda: self.acrescentarLivro(),
+        )
+        fileMenu.add_command(
+            label='Remover Livro',
+            command=lambda: self.removerLivro(),
+        )
+        fileMenu.add_command(
+            label='Sair',
+            command=quit,
+        )
+        menubar.add_cascade(
+            label='Edit',
+            menu=editMenu,
+        )
+        editMenu.add_command(
+            label='Copy',
+            command=lambda: self.copy(),
+        )
+        editMenu.add_command(
+            label='Cut',
+            command=lambda: self.cut(),
+        )
+        editMenu.add_command(
+            label='Paste',
+            command=lambda: self.paste(),
         )
 
         # Frame Principal
