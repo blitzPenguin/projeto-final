@@ -1,4 +1,5 @@
 /* Criação da base de dados */
+DROP DATABASE IF EXISTS Biblioteca_bd;
 CREATE DATABASE IF NOT EXISTS Biblioteca_bd;
 
 USE Biblioteca_bd;

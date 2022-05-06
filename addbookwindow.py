@@ -1,5 +1,5 @@
 from tkinter import *
-import windowconstructor
+import conexao
 
 
 class Addwindow:
@@ -22,10 +22,22 @@ class Addwindow:
             300
         )
 
-        # Frame Introdução de Título
-        frameTitulo = windowconstructor.createFrames(
+        # Frame Principal
+        framePrincipal = Frame(
             addWindow,
-            color='yellow'
+            background='blue',
+            padx=5,
+            pady=5
+        )
+        framePrincipal.pack(
+            expand=TRUE,
+            fill=BOTH
+        )
+
+        # Frame Introdução de Título
+        frameTitulo = Frame(
+            framePrincipal,
+            background='yellow'
         )
         frameTitulo.pack(
             expand=TRUE,
@@ -33,14 +45,14 @@ class Addwindow:
         )
 
         # Introdução de Título
-        labelTitulo = windowconstructor.createLabel(
+        labelTitulo = Label(
             frameTitulo,
             text='Título: '
         )
         labelTitulo.pack(
             side=LEFT
         )
-        entryTitulo = windowconstructor.createEntry(
+        entryTitulo = Entry(
             frameTitulo
         )
         entryTitulo.pack(
@@ -50,9 +62,9 @@ class Addwindow:
         )
 
         # Frame Introdução de Autor
-        frameAutor = windowconstructor.createFrames(
-            addWindow,
-            color='orange'
+        frameAutor = Frame(
+            framePrincipal,
+            background='orange'
         )
         frameAutor.pack(
             expand=TRUE,
@@ -60,14 +72,14 @@ class Addwindow:
         )
 
         # Introdução de Autor
-        labelAutor = windowconstructor.createLabel(
+        labelAutor = Label(
             frameAutor,
             text='Autor: '
         )
         labelAutor.pack(
             side=LEFT
         )
-        entryAutor = windowconstructor.createEntry(
+        entryAutor = Entry(
             frameAutor
         )
         entryAutor.pack(
@@ -77,9 +89,9 @@ class Addwindow:
         )
 
         # Frame Introdução de Editora
-        frameEditor = windowconstructor.createFrames(
-            addWindow,
-            color='red'
+        frameEditor = Frame(
+            framePrincipal,
+            background='red'
         )
         frameEditor.pack(
             expand=TRUE,
@@ -87,14 +99,14 @@ class Addwindow:
         )
 
         # Introdução de Editora
-        labelEditor = windowconstructor.createLabel(
+        labelEditor = Label(
             frameEditor,
             text='Editora: '
         )
         labelEditor.pack(
             side=LEFT
         )
-        entryEditor = windowconstructor.createEntry(
+        entryEditor = Entry(
             frameEditor
         )
         entryEditor.pack(
@@ -104,9 +116,9 @@ class Addwindow:
         )
 
         # Frame Introdução de Publicação
-        framePublication = windowconstructor.createFrames(
-            addWindow,
-            color='blue'
+        framePublication = Frame(
+            framePrincipal,
+            background='blue'
         )
         framePublication.pack(
             expand=TRUE,
@@ -114,14 +126,14 @@ class Addwindow:
         )
 
         # Introdução de Publicação
-        labelPublication = windowconstructor.createLabel(
+        labelPublication = Label(
             framePublication,
             text='Data Publicação: '
         )
         labelPublication.pack(
             side=LEFT
         )
-        entryPublication = windowconstructor.createEntry(
+        entryPublication = Entry(
             framePublication
         )
         entryPublication.pack(
@@ -131,9 +143,9 @@ class Addwindow:
         )
 
         # Frame Introdução de Genre
-        frameGenre = windowconstructor.createFrames(
-            addWindow,
-            color='green'
+        frameGenre = Frame(
+            framePrincipal,
+            background='green'
         )
         frameGenre.pack(
             expand=TRUE,
@@ -141,14 +153,14 @@ class Addwindow:
         )
 
         # Introdução de Genre
-        labelGenre = windowconstructor.createLabel(
+        labelGenre = Label(
             frameGenre,
             text='Género: '
         )
         labelGenre.pack(
             side=LEFT
         )
-        entryGenre = windowconstructor.createEntry(
+        entryGenre = Entry(
             frameGenre
         )
         entryGenre.pack(
@@ -158,9 +170,9 @@ class Addwindow:
         )
 
         # Frame Botões
-        frameButtons = windowconstructor.createFrames(
-            addWindow,
-            color='purple'
+        frameButtons = Frame(
+            framePrincipal,
+            background='purple'
         )
         frameButtons.pack(
             anchor=CENTER,
@@ -174,11 +186,11 @@ class Addwindow:
             )
 
         # Botões Submeter Cancelar
-        buttonAdd = windowconstructor.createButton(
+        buttonAdd = Button(
             frameButtons,
             text='Adicionar Livro'
         )
-        buttonCancel = windowconstructor.createButton(
+        buttonCancel = Button(
             frameButtons,
             text='Cancelar',
             command=lambda: addWindow.destroy()

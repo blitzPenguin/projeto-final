@@ -1,31 +1,44 @@
 from tkinter import *
-import windowconstructor
 import addbookwindow
 import removewindow
+import conexao
 
 
 class Mainwindow:
 
-    # Funções
-    def acrescentarLivro(self):
-        addbookwindow.Addwindow()
-
-    def removerLivro(self):
-        removewindow.RemoveWindow()
-
-    def copy():
+    # Métodos
+    
+    def copy(self):
         pass
 
-    def cut():
+    def cut(self):
         pass
 
-    def paste():
+    def paste(self):
+        pass
+
+    def submeterProcura(self):
+        pass
+
+    def procurar(self):
+        con = conexao.connect()
+        cursor = conexao.createCursor(
+            con
+        )
+        query= 'SELECT * FROM LIVROS WHERE LIVROS.nome LIKE %' + self.pesquisa + '%'
+        cursor.execute(query)
+        self.resultadoPesquisa = cursor.fetchall()
+        
+    def requisitarLivro(self):
+        pass
+
+    def entregarLivro(self):
         pass
 
     # Função construtora
     def __init__(self):
 
-        # Window
+        # Janela
         window = Tk()
         window.title('Biblioteca Escolar')
         window.minsize(
@@ -62,11 +75,11 @@ class Mainwindow:
         )
         fileMenu.add_command(
             label='Acrescentar Livro',
-            command=lambda: self.acrescentarLivro(),
+            command=lambda: addbookwindow.Addwindow()
         )
         fileMenu.add_command(
             label='Remover Livro',
-            command=lambda: self.removerLivro(),
+            command=lambda: removewindow.RemoveWindow()
         )
         fileMenu.add_command(
             label='Sair',
@@ -78,21 +91,23 @@ class Mainwindow:
         )
         editMenu.add_command(
             label='Copy',
-            command=lambda: self.copy(),
+            command=self.copy
         )
         editMenu.add_command(
             label='Cut',
-            command=lambda: self.cut(),
+            command=self.cut
         )
         editMenu.add_command(
             label='Paste',
-            command=lambda: self.paste(),
+            command=self.paste
         )
 
         # Frame Principal
-        framePrincipal = windowconstructor.createFrames(
+        framePrincipal = Frame(
             window,
-            color='blue'
+            background='blue',
+            padx=5,
+            pady=5
         )
         framePrincipal.pack(
             fill=BOTH,
@@ -100,9 +115,9 @@ class Mainwindow:
         )
 
         # Frame Logotipo
-        frameLogotipo = windowconstructor.createFrames(
+        frameLogotipo = Frame(
             framePrincipal,
-            color='light blue'
+            background='light blue'
         )
         frameLogotipo.pack(
             side=TOP,
@@ -127,9 +142,9 @@ class Mainwindow:
         )
 
         # Frame Lista Entregas Pendentes / Atrasadas
-        frameDelivery = windowconstructor.createFrames(
+        frameDelivery = Frame(
             framePrincipal,
-            color='yellow'
+            background='yellow'
         )
         frameDelivery.pack(
             fill=BOTH
@@ -141,7 +156,7 @@ class Mainwindow:
             )
 
         # Lista Entregas Pendentes
-        labelPending = windowconstructor.createLabel(
+        labelPending = Label(
             frameDelivery,
             text='Entregas pendentes para hoje:'
         )
@@ -150,7 +165,7 @@ class Mainwindow:
             column=0,
             sticky=N
         )
-        listPending = windowconstructor.createList(
+        listPending = Listbox(
             frameDelivery
         )
         listPending.grid(
@@ -160,7 +175,7 @@ class Mainwindow:
         )
 
         # Lista Entregas Atrasadas
-        labelBehind = windowconstructor.createLabel(
+        labelBehind = Label(
             frameDelivery,
             text='Entregas em atraso:'
         )
@@ -169,7 +184,7 @@ class Mainwindow:
             column=1,
             sticky=N
         )
-        listBehind = windowconstructor.createList(
+        listBehind = Listbox(
             frameDelivery
         )
         listBehind.grid(
@@ -179,21 +194,22 @@ class Mainwindow:
         )
 
         # Frame de  Entrada de Procuras
-        frameSearch = windowconstructor.createFrames(
+        frameSearch = Frame(
             framePrincipal,
-            color='red'
+            background='red'
         )
         frameSearch.pack(
             fill=BOTH
         )
 
         # Entrada de Procuras
-        entrySearch = windowconstructor.createEntry(
-            frameSearch
-        )
-        buttonSearch = windowconstructor.createButton(
+        entrySearch = Entry(
             frameSearch,
-            text='Pesquisar Livro'
+        )
+        buttonSearch = Button(
+            frameSearch,
+            text='Pesquisar Livro',
+            command=self.procurar,
         )
         entrySearch.pack(
             side=LEFT,
@@ -208,16 +224,16 @@ class Mainwindow:
         )
 
         # Frame Lista de Procuras
-        frameSearchList = windowconstructor.createFrames(
+        frameSearchList = Frame(
             framePrincipal,
-            color='orange'
+            background='orange'
         )
         frameSearchList.pack(
             fill=BOTH
         )
 
         # Lista de Procuras
-        listSearch = windowconstructor.createList(
+        listSearch = Listbox(
             frameSearchList
         )
         listSearch.pack(
@@ -225,9 +241,9 @@ class Mainwindow:
         )
 
         # Frame Botões
-        frameButtons = windowconstructor.createFrames(
+        frameButtons = Frame(
             framePrincipal,
-            color='green'
+            background='green'
         )
         frameButtons.pack(
             anchor=CENTER,
@@ -241,13 +257,15 @@ class Mainwindow:
             )
 
         # Botões
-        buttonAdd = windowconstructor.createButton(
+        buttonAdd = Button(
             frameButtons,
-            text='Adicionar Requisição'
+            text='Adicionar Requisição',
+            command=self.requisitarLivro
         )
-        buttonDeliver = windowconstructor.createButton(
+        buttonDeliver = Button(
             frameButtons,
-            text='Entregar Livro'
+            text='Entregar Livro',
+            command=self.entregarLivro
         )
         buttonAdd.grid(
             row=0,

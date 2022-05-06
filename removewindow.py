@@ -1,5 +1,5 @@
 from tkinter import *
-import windowconstructor
+import conexao
 
 
 class RemoveWindow:
@@ -21,20 +21,33 @@ class RemoveWindow:
             300
         )
 
-        # Frame de  Entrada de Procuras
-        frameSearch = windowconstructor.createFrames(
+        # Frame Principal
+        framePrincipal = Frame(
             removeWindow,
-            color='red'
+            background='blue',
+            padx=5,
+            pady=5
+        )
+        framePrincipal.pack(
+            expand=TRUE,
+            fill=BOTH
+        )
+
+        # Frame de  Entrada de Procuras
+        frameSearch = Frame(
+            framePrincipal,
+            background='red'
         )
         frameSearch.pack(
+            expand=TRUE,
             fill=BOTH
         )
 
         # Entrada de Procuras
-        entrySearch = windowconstructor.createEntry(
+        entrySearch = Entry(
             frameSearch
         )
-        buttonSearch = windowconstructor.createButton(
+        buttonSearch = Button(
             frameSearch,
             text='Pesquisar Livro'
         )
@@ -51,16 +64,17 @@ class RemoveWindow:
         )
 
         # Frame Lista de Procuras
-        frameSearchList = windowconstructor.createFrames(
-            removeWindow,
-            color='orange'
+        frameSearchList = Frame(
+            framePrincipal,
+            background='orange'
         )
         frameSearchList.pack(
+            expand=TRUE,
             fill=BOTH
         )
 
         # Lista de Procuras
-        listSearch = windowconstructor.createList(
+        listSearch = Listbox(
             frameSearchList
         )
         listSearch.pack(
@@ -68,14 +82,15 @@ class RemoveWindow:
         )
 
         # Frame Botões
-        frameButtons = windowconstructor.createFrames(
-            removeWindow,
-            color='green'
+        frameButtons = Frame(
+            framePrincipal,
+            background='green'
         )
         frameButtons.pack(
             anchor=CENTER,
             side=BOTTOM,
-            fill=X
+            fill=X,
+            expand=TRUE
         )
         for j in range(2):
             frameButtons.grid_columnconfigure(
@@ -84,7 +99,7 @@ class RemoveWindow:
             )
 
         # Botões
-        buttonRemove = windowconstructor.createButton(
+        buttonRemove = Button(
             frameButtons,
             text='Remover Livro'
         )
@@ -92,7 +107,7 @@ class RemoveWindow:
             row=0,
             column=0
         )
-        buttonCancel = windowconstructor.createButton(
+        buttonCancel = Button(
             frameButtons,
             text='Cancelar',
             command=lambda: removeWindow.destroy()

@@ -58,6 +58,10 @@ def createEntry(master, **kwargs):
         master,
         width=10,
     )
+    if 'command' in kwargs:
+        entry.config(command=kwargs['command'])
+    if 'textvariable' in kwargs:
+        entry.config(textvariable=kwargs['textvariable'])
     return entry
 
 # Criar Lista
