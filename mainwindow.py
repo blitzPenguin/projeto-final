@@ -27,7 +27,6 @@ class Mainwindow:
         )
         query= 'SELECT * FROM LIVROS WHERE LIVROS.nome LIKE %' + self.pesquisa + '%'
         cursor.execute(query)
-        self.resultadoPesquisa = cursor.fetchall()
         
     def requisitarLivro(self):
         pass
