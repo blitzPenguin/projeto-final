@@ -15,8 +15,7 @@ def cut():
 
 
 def paste(window, entry_search):
-    clip_text = window.clipboard_get()
-    entry_search.insert(END, clip_text)
+    entry_search.insert(END, window.clipboard_get())
 
 
 def procurar_livro(list_search):
