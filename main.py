@@ -1,3 +1,3 @@
 import mainwindow
 
-mainwindow.createWindow()
+mainwindow.criar_janela()

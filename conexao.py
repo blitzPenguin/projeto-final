@@ -1,5 +1,6 @@
 import mysql.connector
-  
+
+
 def connect():
     con = mysql.connector.connect(
         host="localhost",
@@ -9,32 +10,35 @@ def connect():
     )
     return con
 
-def createCursor(con):
+
+def create_cursor(con):
     cursor = con.cursor()
     return cursor
 
-def query(cursor, input):
-    query = input
-    cursor.execute(query)
+
+def query(cursor, input_text):
+    input_query = input_text
+    cursor.execute(input_query)
     return cursor.fetchall()
 
 
-# Lixo
-#con = connect()  
+# Codigo para teste
+
+# con = connect()
   
 # create cursor object
-#cursor = createCursor(con)
+# cursor = createCursor(con)
   
 # assign data query
-#query1 = "select * from GENEROS"
+# query1 = "select * from GENEROS"
   
 # executing cursor
-#cursor.execute(query1)
+# cursor.execute(query1)
   
 # display all records
-#table = cursor.fetchall()
+# table = cursor.fetchall()
   
 # describe table
-#print('\n Table Description:')
-#for attr in table:
-    #print(attr)
+# print('\n Table Description:')
+# for attr in table:
+#   print(attr)

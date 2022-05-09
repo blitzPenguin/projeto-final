@@ -3,33 +3,43 @@ import addbookwindow
 import removewindow
 import conexao
 
-#Metodos
+# Metodos
+
+
 def copy():
     pass
+
 
 def cut():
     pass
 
-def paste(entrySearch):
-    entrySearch.clipboard_append()
 
-def procurar(listSearch):
+def paste(window, entry_search):
+    clip_text = window.clipboard_get()
+    entry_search.insert(END, clip_text)
+
+
+def procurar_livro(list_search):
     con = conexao.connect()
-    cursor = conexao.createCursor(con)
+    cursor = conexao.create_cursor(con)
     query = conexao.query(cursor, 'SELECT * FROM LIVROS')
-    listSearch.delete(0, END)
+    list_search.delete(0, END)
     for i in query:
-        listSearch.insert(END,query)
+        list_search.insert(END, query)
 
 
-def requisitarLivro():
+def requisitar_livro():
     pass
 
-def entregarLivro():
+
+def entregar_livro():
     pass
+
 
 # Função construtora
-def createWindow():
+
+
+def criar_janela():
 
     # Janela
     window = Tk()
@@ -54,65 +64,65 @@ def createWindow():
     # Barra Topo
     menubar = Menu(window)
     window.config(menu=menubar)
-    fileMenu = Menu(
+    file_menu = Menu(
         menubar,
         tearoff=0,
     )
-    editMenu = Menu(
+    edit_menu = Menu(
         menubar,
         tearoff=0,
     )
     menubar.add_cascade(
         label='File',
-        menu=fileMenu,
+        menu=file_menu,
     )
-    fileMenu.add_command(
+    file_menu.add_command(
         label='Acrescentar Livro',
-        command=lambda: addbookwindow.Addwindow()
+        command=lambda: addbookwindow.criar_janela()
     )
-    fileMenu.add_command(
+    file_menu.add_command(
         label='Remover Livro',
-        command=lambda: removewindow.RemoveWindow()
+        command=lambda: removewindow.criar_janela()
     )
-    fileMenu.add_command(
+    file_menu.add_command(
         label='Sair',
         command=quit,
     )
     menubar.add_cascade(
         label='Edit',
-        menu=editMenu,
+        menu=edit_menu,
     )
-    editMenu.add_command(
+    edit_menu.add_command(
         label='Copy',
         command=copy
     )
-    editMenu.add_command(
+    edit_menu.add_command(
         label='Cut',
         command=cut
     )
-    editMenu.add_command(
+    edit_menu.add_command(
         label='Paste',
-        command=lambda: paste(entrySearch)
+        command=lambda: paste(window, entry_search)
     )
 
     # Frame Principal
-    framePrincipal = Frame(
+    frame_principal = Frame(
         window,
         background='blue',
         padx=5,
         pady=5
     )
-    framePrincipal.pack(
+    frame_principal.pack(
         fill=BOTH,
         expand=TRUE
     )
 
     # Frame Logotipo
-    frameLogotipo = Frame(
-        framePrincipal,
+    frame_logotipo = Frame(
+        frame_principal,
         background='light blue'
     )
-    frameLogotipo.pack(
+    frame_logotipo.pack(
         side=TOP,
         expand=TRUE,
         fill=BOTH
@@ -122,12 +132,12 @@ def createWindow():
     logotipo = PhotoImage(
         file='./imagens/arcor-logo-5.png'
     )
-    logotipoLabel = Label(
-        frameLogotipo,
+    logotipo_label = Label(
+        frame_logotipo,
         image=logotipo,
         height=120
     )
-    logotipoLabel.pack(
+    logotipo_label.pack(
         side=TOP,
         expand=TRUE,
         fill=BOTH,
@@ -135,136 +145,136 @@ def createWindow():
     )
 
     # Frame Lista Entregas Pendentes / Atrasadas
-    frameDelivery = Frame(
-        framePrincipal,
+    frame_delivery = Frame(
+        frame_principal,
         background='yellow'
     )
-    frameDelivery.pack(
+    frame_delivery.pack(
         fill=BOTH
     )
     for j in range(2):
-        frameDelivery.grid_columnconfigure(
+        frame_delivery.grid_columnconfigure(
             j,
             weight=1
         )
 
     # Lista Entregas Pendentes
-    labelPending = Label(
-        frameDelivery,
+    label_pending = Label(
+        frame_delivery,
         text='Entregas pendentes para hoje:'
     )
-    labelPending.grid(
+    label_pending.grid(
         row=0,
         column=0,
         sticky=N
     )
-    listPending = Listbox(
-        frameDelivery
+    list_pending = Listbox(
+        frame_delivery
     )
-    listPending.grid(
+    list_pending.grid(
         row=1,
         column=0,
         sticky=NSEW
     )
 
     # Lista Entregas Atrasadas
-    labelBehind = Label(
-        frameDelivery,
+    label_behind = Label(
+        frame_delivery,
         text='Entregas em atraso:'
     )
-    labelBehind.grid(
+    label_behind.grid(
         row=0,
         column=1,
         sticky=N
     )
-    listBehind = Listbox(
-        frameDelivery
+    list_behind = Listbox(
+        frame_delivery
     )
-    listBehind.grid(
+    list_behind.grid(
         row=1,
         column=1,
         sticky=NSEW
     )
 
     # Frame de  Entrada de Procuras
-    frameSearch = Frame(
-        framePrincipal,
+    frame_search = Frame(
+        frame_principal,
         background='red'
     )
-    frameSearch.pack(
+    frame_search.pack(
         fill=BOTH
     )
 
     # Entrada de Procuras
-    entrySearch = Entry(
-        frameSearch,
+    entry_search = Entry(
+        frame_search,
     )
-    buttonSearch = Button(
-        frameSearch,
+    button_search = Button(
+        frame_search,
         text='Pesquisar Livro',
-        command=lambda: procurar(listSearch),
+        command=lambda: procurar_livro(list_search),
     )
-    entrySearch.pack(
+    entry_search.pack(
         side=LEFT,
         anchor=NW,
         fill=X,
         expand=TRUE
     )
-    buttonSearch.pack(
+    button_search.pack(
         side=LEFT,
         anchor=NE,
         expand=FALSE
     )
 
     # Frame Lista de Procuras
-    frameSearchList = Frame(
-        framePrincipal,
+    frame_search_list = Frame(
+        frame_principal,
         background='orange'
     )
-    frameSearchList.pack(
+    frame_search_list.pack(
         fill=BOTH
     )
 
     # Lista de Procuras
-    listSearch = Listbox(
-        frameSearchList
+    list_search = Listbox(
+        frame_search_list
     )
-    listSearch.pack(
+    list_search.pack(
         fill=X
     )
 
     # Frame Botões
-    frameButtons = Frame(
-        framePrincipal,
+    frame_buttons = Frame(
+        frame_principal,
         background='green'
     )
-    frameButtons.pack(
+    frame_buttons.pack(
         anchor=CENTER,
         side=BOTTOM,
         fill=X
     )
     for j in range(2):
-        frameButtons.grid_columnconfigure(
+        frame_buttons.grid_columnconfigure(
             j,
             weight=1
         )
 
     # Botões
-    buttonAdd = Button(
-        frameButtons,
+    button_add = Button(
+        frame_buttons,
         text='Adicionar Requisição',
-        command=requisitarLivro
+        command=requisitar_livro
     )
-    buttonDeliver = Button(
-        frameButtons,
+    button_deliver = Button(
+        frame_buttons,
         text='Entregar Livro',
-        command=entregarLivro
+        command=entregar_livro
     )
-    buttonAdd.grid(
+    button_add.grid(
         row=0,
         column=0
     )
-    buttonDeliver.grid(
+    button_deliver.grid(
         row=0,
         column=1
     )

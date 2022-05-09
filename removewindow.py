@@ -2,118 +2,118 @@ from tkinter import *
 import conexao
 
 
-class RemoveWindow:
+# Função Construtora
 
-    # Função Construtora
-    def __init__(self):
 
-        # Criar janela toplevel
-        removeWindow = Toplevel()
-        removeWindow.geometry(
-            '400x300'
-        )
-        removeWindow.minsize(
-            400,
-            300
-        )
-        removeWindow.maxsize(
-            400,
-            300
+def criar_janela():
+
+    # Criar janela toplevel
+    remove_window = Toplevel()
+    remove_window.geometry(
+        '400x300'
+    )
+    remove_window.minsize(
+        400,
+        300
+    )
+    remove_window.maxsize(
+        400,
+        300
+    )
+
+    # Frame Principal
+    frame_principal = Frame(
+        remove_window,
+        background='blue',
+        padx=5,
+        pady=5
+    )
+    frame_principal.pack(
+        expand=TRUE,
+        fill=BOTH
+    )
+
+    # Frame de  Entrada de Procuras
+    frame_search = Frame(
+        frame_principal,
+        background='red'
+    )
+    frame_search.pack(
+        expand=TRUE,
+        fill=BOTH
+    )
+
+    # Entrada de Procuras
+    entry_search = Entry(
+        frame_search
+    )
+    button_search = Button(
+        frame_search,
+        text='Pesquisar Livro'
+    )
+    entry_search.pack(
+        side=LEFT,
+        anchor=NW,
+        fill=X,
+        expand=TRUE
+    )
+    button_search.pack(
+        side=LEFT,
+        anchor=NE,
+        expand=FALSE
+    )
+
+    # Frame Lista de Procuras
+    frame_search_list = Frame(
+        frame_principal,
+        background='orange'
+    )
+    frame_search_list.pack(
+        expand=TRUE,
+        fill=BOTH
+    )
+
+    # Lista de Procuras
+    list_search = Listbox(
+        frame_search_list
+    )
+    list_search.pack(
+        fill=X
+    )
+
+    # Frame Botões
+    frame_botoes = Frame(
+        frame_principal,
+        background='green'
+    )
+    frame_botoes.pack(
+        anchor=CENTER,
+        side=BOTTOM,
+        fill=X,
+        expand=TRUE
+    )
+    for j in range(2):
+        frame_botoes.grid_columnconfigure(
+            j,
+            weight=1
         )
 
-        # Frame Principal
-        framePrincipal = Frame(
-            removeWindow,
-            background='blue',
-            padx=5,
-            pady=5
-        )
-        framePrincipal.pack(
-            expand=TRUE,
-            fill=BOTH
-        )
-
-        # Frame de  Entrada de Procuras
-        frameSearch = Frame(
-            framePrincipal,
-            background='red'
-        )
-        frameSearch.pack(
-            expand=TRUE,
-            fill=BOTH
-        )
-
-        # Entrada de Procuras
-        entrySearch = Entry(
-            frameSearch
-        )
-        buttonSearch = Button(
-            frameSearch,
-            text='Pesquisar Livro'
-        )
-        entrySearch.pack(
-            side=LEFT,
-            anchor=NW,
-            fill=X,
-            expand=TRUE
-        )
-        buttonSearch.pack(
-            side=LEFT,
-            anchor=NE,
-            expand=FALSE
-        )
-
-        # Frame Lista de Procuras
-        frameSearchList = Frame(
-            framePrincipal,
-            background='orange'
-        )
-        frameSearchList.pack(
-            expand=TRUE,
-            fill=BOTH
-        )
-
-        # Lista de Procuras
-        listSearch = Listbox(
-            frameSearchList
-        )
-        listSearch.pack(
-            fill=X
-        )
-
-        # Frame Botões
-        frameButtons = Frame(
-            framePrincipal,
-            background='green'
-        )
-        frameButtons.pack(
-            anchor=CENTER,
-            side=BOTTOM,
-            fill=X,
-            expand=TRUE
-        )
-        for j in range(2):
-            frameButtons.grid_columnconfigure(
-                j,
-                weight=1
-            )
-
-        # Botões
-        buttonRemove = Button(
-            frameButtons,
-            text='Remover Livro'
-        )
-        buttonRemove.grid(
-            row=0,
-            column=0
-        )
-        buttonCancel = Button(
-            frameButtons,
-            text='Cancelar',
-            command=lambda: removeWindow.destroy()
-        )
-        buttonCancel.grid(
-            row=0,
-            column=1
-        )
-        removeWindow.mainloop()
+    # Botões
+    botao_remove = Button(
+        frame_botoes,
+        text='Remover Livro'
+    )
+    botao_remove.grid(
+        row=0,
+        column=0
+    )
+    botao_cancel = Button(
+        frame_botoes,
+        text='Cancelar',
+        command=lambda: remove_window.destroy()
+    )
+    botao_cancel.grid(
+        row=0,
+        column=1
+    )
+    remove_window.mainloop()
