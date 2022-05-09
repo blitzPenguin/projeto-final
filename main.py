@@ -1,3 +1,3 @@
 import mainwindow
 
-mainwindow.Mainwindow()
+mainwindow.createWindow()
