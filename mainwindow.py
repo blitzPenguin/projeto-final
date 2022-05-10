@@ -29,15 +29,21 @@ def paste(window, entry_search):
 def procurar_livro(list_search):
     con = conexao.connect()
     cursor = conexao.create_cursor(con)
-    query = conexao.query(cursor, 'SELECT * FROM LIVROS')
+    conexao.query(cursor, 'SELECT * FROM LIVROS')
     fetch = conexao.fetch(cursor)
     list_search.delete(0, END)
     for i in fetch:
         list_search.insert(END, i)
+    con.close()
 
 
-def requisitar_livro():
-    pass
+def requisitar_livro(list_search):
+    con = conexao.connect()
+    cursor = conexao.create_cursor(con)
+    conexao.query(
+        cursor,
+        '''INSERT INTO REQUISICOES''')
+
 
 
 def entregar_livro():
@@ -138,7 +144,7 @@ def criar_janela():
 
     # Label logótipo
     logotipo = PhotoImage(
-        file='./imagens/arcor-logo-5.png'
+        file='./imagens/logo4.png'
     )
     logotipo_label = Label(
         frame_logotipo,
@@ -269,7 +275,7 @@ def criar_janela():
     button_add = Button(
         frame_buttons,
         text='Adicionar Requisição',
-        command=requisitar_livro
+        command=lambda: requisitar_livro(list_search)
     )
     button_deliver = Button(
         frame_buttons,

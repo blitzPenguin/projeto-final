@@ -3,6 +3,12 @@ from tkinter import messagebox
 import conexao
 
 
+# Funções
+
+def remover_livro():
+    pass
+
+
 # Função Construtora
 
 
@@ -102,7 +108,8 @@ def criar_janela():
     # Botões
     botao_remove = Button(
         frame_botoes,
-        text='Remover Livro'
+        text='Remover Livro',
+        command=lambda: remover_livro()
     )
     botao_remove.grid(
         row=0,
