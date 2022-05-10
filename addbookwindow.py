@@ -11,6 +11,8 @@ def adicionar_livro(
         entry_genero,
         entry_isbn
 ):
+    con = conexao.connect()
+    cursor = conexao.create_cursor(con)
     try:
         titulo = entry_titulo.get()
         autor = entry_autor.get()
@@ -20,8 +22,6 @@ def adicionar_livro(
         isbn = entry_isbn.get()
         query_statement = '''INSERT INTO LIVROS (isbn, titulo, autor, editora, data_publicacao, id_genero)
             VALUES (\''''+isbn+'\', \''+titulo+'\', \''+autor+'\', \''+editora+'\', \''+publicacao+'\', \''+genero+'\')'
-        con = conexao.connect()
-        cursor = conexao.create_cursor(con)
         conexao.query(cursor, query_statement)
     except Exception:
         messagebox.showerror(title='Error', message='Não foi possivel adicionar o livro à base de dados')
