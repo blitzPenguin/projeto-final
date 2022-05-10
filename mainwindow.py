@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import addbookwindow
 import removewindow
 import conexao
@@ -7,25 +8,32 @@ import conexao
 
 
 def copy(window, entry_search):
+    window.clipboard_clear()
     window.clipboard_append(entry_search.selection_get())
 
 
 def cut(window, entry_search):
+    window.clipboard_clear()
     window.clipboard_append(entry_search.selection_get())
-    entry_search.selection_clear()
+    if entry_search.index(ANCHOR) < entry_search.index(INSERT):
+        entry_search.delete(ANCHOR, INSERT)
+    elif entry_search.index(INSERT) < entry_search.index(ANCHOR):
+        entry_search.delete(INSERT, ANCHOR)
 
 
 def paste(window, entry_search):
     entry_search.insert(entry_search.index(INSERT), window.clipboard_get())
+    window.clipboard_clear()
 
 
 def procurar_livro(list_search):
     con = conexao.connect()
     cursor = conexao.create_cursor(con)
     query = conexao.query(cursor, 'SELECT * FROM LIVROS')
+    fetch = conexao.fetch(cursor)
     list_search.delete(0, END)
-    for i in query:
-        list_search.insert(END, query)
+    for i in fetch:
+        list_search.insert(END, i)
 
 
 def requisitar_livro():
@@ -60,6 +68,8 @@ def criar_janela():
         width=TRUE,
         height=TRUE
     )
+    style = ttk.Style(window)
+    style.theme_use('alt')
 
     # Barra Topo
     menubar = Menu(window)
@@ -108,7 +118,6 @@ def criar_janela():
     # Frame Principal
     frame_principal = Frame(
         window,
-        background='blue',
         padx=5,
         pady=5
     )
@@ -120,7 +129,6 @@ def criar_janela():
     # Frame Logotipo
     frame_logotipo = Frame(
         frame_principal,
-        background='light blue'
     )
     frame_logotipo.pack(
         side=TOP,
@@ -147,7 +155,6 @@ def criar_janela():
     # Frame Lista Entregas Pendentes / Atrasadas
     frame_delivery = Frame(
         frame_principal,
-        background='yellow'
     )
     frame_delivery.pack(
         fill=BOTH
@@ -199,7 +206,6 @@ def criar_janela():
     # Frame de  Entrada de Procuras
     frame_search = Frame(
         frame_principal,
-        background='red'
     )
     frame_search.pack(
         fill=BOTH
@@ -213,23 +219,24 @@ def criar_janela():
         frame_search,
         text='Pesquisar Livro',
         command=lambda: procurar_livro(list_search),
+        padx=1
     )
     entry_search.pack(
         side=LEFT,
         anchor=NW,
         fill=X,
-        expand=TRUE
+        expand=TRUE,
+        pady=5
     )
     button_search.pack(
         side=LEFT,
         anchor=NE,
-        expand=FALSE
+        expand=FALSE,
     )
 
     # Frame Lista de Procuras
     frame_search_list = Frame(
         frame_principal,
-        background='orange'
     )
     frame_search_list.pack(
         fill=BOTH
@@ -246,7 +253,6 @@ def criar_janela():
     # Frame Botões
     frame_buttons = Frame(
         frame_principal,
-        background='green'
     )
     frame_buttons.pack(
         anchor=CENTER,

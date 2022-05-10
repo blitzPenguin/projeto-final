@@ -17,8 +17,10 @@ def create_cursor(con):
 
 
 def query(cursor, input_text):
-    input_query = input_text
-    cursor.execute(input_query)
+    cursor.execute(input_text)
+
+
+def fetch(cursor):
     return cursor.fetchall()
 
 

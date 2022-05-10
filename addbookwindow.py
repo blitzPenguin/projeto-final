@@ -1,5 +1,40 @@
 from tkinter import *
+from tkinter import messagebox
 import conexao
+
+
+def adicionar_livro(
+        entry_titulo,
+        entry_autor,
+        entry_editora,
+        entry_publicacao,
+        entry_genero,
+        entry_isbn
+):
+    try:
+        titulo = entry_titulo.get()
+        autor = entry_autor.get()
+        editora = entry_editora.get()
+        publicacao = entry_publicacao.get()
+        genero = entry_genero.get()
+        isbn = entry_isbn.get()
+        query_statement = '''INSERT INTO LIVROS (isbn, titulo, autor, editora, data_publicacao, id_genero)
+            VALUES (\''''+isbn+'\', \''+titulo+'\', \''+autor+'\', \''+editora+'\', \''+publicacao+'\', \''+genero+'\')'
+        con = conexao.connect()
+        cursor = conexao.create_cursor(con)
+        conexao.query(cursor, query_statement)
+    except Exception:
+        messagebox.showerror(title='Error', message='Não foi possivel adicionar o livro à base de dados')
+    else:
+        if messagebox.askyesno(title='confirm', message='Tem a certeza que quer adicionar o livro à base de dados?'):
+            con.commit()
+            entry_isbn.delete(0, END)
+            entry_titulo.delete(0, END)
+            entry_autor.delete(0, END)
+            entry_editora.delete(0, END)
+            entry_publicacao.delete(0, END)
+            entry_genero.delete(0, END)
+    con.close()
 
 
 # Função construtora
@@ -25,7 +60,6 @@ def criar_janela():
     # Frame Principal
     frame_principal = Frame(
         add_window,
-        background='blue',
         padx=5,
         pady=5
     )
@@ -37,7 +71,6 @@ def criar_janela():
     # Frame Introdução de Título
     frame_titulo = Frame(
         frame_principal,
-        background='yellow'
     )
     frame_titulo.pack(
         expand=TRUE,
@@ -64,7 +97,6 @@ def criar_janela():
     # Frame Introdução de Autor
     frame_autor = Frame(
         frame_principal,
-        background='orange'
     )
     frame_autor.pack(
         expand=TRUE,
@@ -91,7 +123,6 @@ def criar_janela():
     # Frame Introdução de Editora
     frame_editora = Frame(
         frame_principal,
-        background='red'
     )
     frame_editora.pack(
         expand=TRUE,
@@ -118,7 +149,6 @@ def criar_janela():
     # Frame Introdução de Publicação
     frame_publicacao = Frame(
         frame_principal,
-        background='light blue'
     )
     frame_publicacao.pack(
         expand=TRUE,
@@ -145,14 +175,13 @@ def criar_janela():
     # Frame Introdução de Genre
     frame_genero = Frame(
         frame_principal,
-        background='green'
     )
     frame_genero.pack(
         expand=TRUE,
         fill=BOTH
     )
 
-    # Introdução de Genre
+    # Introdução de Genero
     label_genero = Label(
         frame_genero,
         text='Género: '
@@ -169,10 +198,35 @@ def criar_janela():
         fill=X
     )
 
+    # Frame isbn
+    frame_isbn = Frame(
+        frame_principal,
+    )
+    frame_isbn.pack(
+        expand=TRUE,
+        fill=BOTH
+    )
+
+    # Introdução do isbn
+    label_isbn = Label(
+        frame_isbn,
+        text='ISBN: '
+    )
+    label_isbn.pack(
+        side=LEFT
+    )
+    entry_isbn = Entry(
+        frame_isbn
+    )
+    entry_isbn.pack(
+        side=RIGHT,
+        expand=TRUE,
+        fill=X
+    )
+
     # Frame Botões
     frame_botoes = Frame(
         frame_principal,
-        background='purple'
     )
     frame_botoes.pack(
         anchor=CENTER,
@@ -188,7 +242,15 @@ def criar_janela():
     # Botões Submeter Cancelar
     botao_add = Button(
         frame_botoes,
-        text='Adicionar Livro'
+        text='Adicionar Livro',
+        command=lambda: adicionar_livro(
+            entry_titulo,
+            entry_autor,
+            entry_editora,
+            entry_publicacao,
+            entry_genero,
+            entry_isbn
+        )
     )
     botao_cancel = Button(
         frame_botoes,
