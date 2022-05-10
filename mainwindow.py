@@ -6,16 +6,17 @@ import conexao
 # Metodos
 
 
-def copy():
-    pass
+def copy(window, entry_search):
+    window.clipboard_append(entry_search.selection_get())
 
 
-def cut():
-    pass
+def cut(window, entry_search):
+    window.clipboard_append(entry_search.selection_get())
+    entry_search.selection_clear()
 
 
 def paste(window, entry_search):
-    entry_search.insert(END, window.clipboard_get())
+    entry_search.insert(entry_search.index(INSERT), window.clipboard_get())
 
 
 def procurar_livro(list_search):
@@ -93,11 +94,11 @@ def criar_janela():
     )
     edit_menu.add_command(
         label='Copy',
-        command=copy
+        command=lambda: copy(window, entry_search)
     )
     edit_menu.add_command(
         label='Cut',
-        command=cut
+        command=lambda: cut(window, entry_search)
     )
     edit_menu.add_command(
         label='Paste',
