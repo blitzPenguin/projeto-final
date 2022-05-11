@@ -31,7 +31,6 @@ def criar_janela():
     # Frame Principal
     frame_principal = Frame(
         remove_window,
-        background='blue',
         padx=5,
         pady=5
     )
@@ -43,7 +42,6 @@ def criar_janela():
     # Frame de  Entrada de Procuras
     frame_search = Frame(
         frame_principal,
-        background='red'
     )
     frame_search.pack(
         expand=TRUE,
@@ -62,7 +60,8 @@ def criar_janela():
         side=LEFT,
         anchor=NW,
         fill=X,
-        expand=TRUE
+        expand=TRUE,
+        pady=5
     )
     button_search.pack(
         side=LEFT,
@@ -73,7 +72,6 @@ def criar_janela():
     # Frame Lista de Procuras
     frame_search_list = Frame(
         frame_principal,
-        background='orange'
     )
     frame_search_list.pack(
         expand=TRUE,
@@ -91,7 +89,6 @@ def criar_janela():
     # Frame Botões
     frame_botoes = Frame(
         frame_principal,
-        background='green'
     )
     frame_botoes.pack(
         anchor=CENTER,

@@ -31,19 +31,25 @@ def procurar_livro(list_search):
     cursor = conexao.create_cursor(con)
     conexao.query(cursor, 'SELECT * FROM LIVROS')
     fetch = conexao.fetch(cursor)
-    list_search.delete(0, END)
+    for i in list_search.get_children():
+        list_search.delete(i)
     for i in fetch:
-        list_search.insert(END, i)
+        list_search.insert('', END, values=i)
     con.close()
 
 
 def requisitar_livro(list_search):
-    con = conexao.connect()
-    cursor = conexao.create_cursor(con)
-    conexao.query(
-        cursor,
-        '''INSERT INTO REQUISICOES''')
-
+#    con = conexao.connect()
+#    cursor = conexao.create_cursor(con)
+#    conexao.query(
+#        cursor,
+#        '''INSERT INTO REQUISICOES''')
+    id_livro = list_search.item(list_search.focus())['values'][0]
+    print(id_livro)
+#    for i in range(livros.__len__()):
+#        livros[i] = list(livros[i].split(' '))
+#        print(livros[i])
+    
 
 
 def entregar_livro():
@@ -249,9 +255,16 @@ def criar_janela():
     )
 
     # Lista de Procuras
-    list_search = Listbox(
-        frame_search_list
+    columns = ('ID', 'ISBN', 'Titulo', 'Autor', 'Editora', 'Publicação', 'Género', 'Requesitado')
+    list_search = ttk.Treeview(
+        frame_search_list,
+        columns=columns,
+        show='headings',
+        selectmode='extended',
     )
+    for i in columns:
+        list_search.heading(i, text=i)
+        list_search.column(i, width=10, anchor='center')
     list_search.pack(
         fill=X
     )
