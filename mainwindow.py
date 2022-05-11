@@ -3,6 +3,8 @@ from tkinter import ttk
 import addbookwindow
 import removewindow
 import conexao
+import requisicaodialog
+
 
 # Metodos
 
@@ -39,17 +41,9 @@ def procurar_livro(list_search):
 
 
 def requisitar_livro(list_search):
-#    con = conexao.connect()
-#    cursor = conexao.create_cursor(con)
-#    conexao.query(
-#        cursor,
-#        '''INSERT INTO REQUISICOES''')
     id_livro = list_search.item(list_search.focus())['values'][0]
     print(id_livro)
-#    for i in range(livros.__len__()):
-#        livros[i] = list(livros[i].split(' '))
-#        print(livros[i])
-    
+    requisicaodialog.criar_dialog(id_livro, 'Titulo')
 
 
 def entregar_livro():

@@ -3,6 +3,7 @@ from tkinter import messagebox
 import conexao
 
 
+# Função submissão Novo Livro
 def adicionar_livro(
         entry_titulo,
         entry_autor,
@@ -24,9 +25,10 @@ def adicionar_livro(
             VALUES (\''''+isbn+'\', \''+titulo+'\', \''+autor+'\', \''+editora+'\', \''+publicacao+'\', \''+genero+'\')'
         conexao.query(cursor, query_statement)
     except Exception:
-        messagebox.showerror(title='Error', message='Não foi possivel adicionar o livro à base de dados')
+        messagebox.showerror(title='Erro', message='Não foi possivel adicionar o livro à base de dados')
+        con.close()
     else:
-        if messagebox.askyesno(title='confirm', message='Tem a certeza que quer adicionar o livro à base de dados?'):
+        if messagebox.askyesno(title='Confirmação', message='Tem a certeza que quer adicionar o livro à base de dados?'):
             con.commit()
             entry_isbn.delete(0, END)
             entry_titulo.delete(0, END)
@@ -34,7 +36,7 @@ def adicionar_livro(
             entry_editora.delete(0, END)
             entry_publicacao.delete(0, END)
             entry_genero.delete(0, END)
-    con.close()
+        con.close()
 
 
 # Função construtora
