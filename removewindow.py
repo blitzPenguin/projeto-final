@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 from tkinter import messagebox
 import conexao
 
@@ -29,10 +30,9 @@ def criar_janela():
     )
 
     # Frame Principal
-    frame_principal = Frame(
+    frame_principal = ttk.Frame(
         remove_window,
-        padx=5,
-        pady=5
+        padding=5
     )
     frame_principal.pack(
         expand=TRUE,
@@ -40,7 +40,7 @@ def criar_janela():
     )
 
     # Frame de  Entrada de Procuras
-    frame_search = Frame(
+    frame_search = ttk.Frame(
         frame_principal,
     )
     frame_search.pack(
@@ -49,10 +49,10 @@ def criar_janela():
     )
 
     # Entrada de Procuras
-    entry_search = Entry(
+    entry_search = ttk.Entry(
         frame_search
     )
-    button_search = Button(
+    button_search = ttk.Button(
         frame_search,
         text='Pesquisar Livro'
     )
@@ -61,16 +61,16 @@ def criar_janela():
         anchor=NW,
         fill=X,
         expand=TRUE,
-        pady=5
+        pady=3
     )
     button_search.pack(
         side=LEFT,
         anchor=NE,
-        expand=FALSE
+        expand=FALSE,
     )
 
     # Frame Lista de Procuras
-    frame_search_list = Frame(
+    frame_search_list = ttk.Frame(
         frame_principal,
     )
     frame_search_list.pack(
@@ -87,7 +87,7 @@ def criar_janela():
     )
 
     # Frame Botões
-    frame_botoes = Frame(
+    frame_botoes = ttk.Frame(
         frame_principal,
     )
     frame_botoes.pack(
@@ -103,7 +103,7 @@ def criar_janela():
         )
 
     # Botões
-    botao_remove = Button(
+    botao_remove = ttk.Button(
         frame_botoes,
         text='Remover Livro',
         command=lambda: remover_livro()
@@ -112,7 +112,7 @@ def criar_janela():
         row=0,
         column=0
     )
-    botao_cancel = Button(
+    botao_cancel = ttk.Button(
         frame_botoes,
         text='Cancelar',
         command=lambda: remove_window.destroy()

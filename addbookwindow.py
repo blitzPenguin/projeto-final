@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 import conexao
 
 
@@ -60,10 +61,9 @@ def criar_janela():
     )
 
     # Frame Principal
-    frame_principal = Frame(
+    frame_principal = ttk.Frame(
         add_window,
-        padx=5,
-        pady=5
+        padding=5
     )
     frame_principal.pack(
         expand=TRUE,
@@ -71,7 +71,7 @@ def criar_janela():
     )
 
     # Frame Introdução de Título
-    frame_titulo = Frame(
+    frame_titulo = ttk.Frame(
         frame_principal,
     )
     frame_titulo.pack(
@@ -80,14 +80,14 @@ def criar_janela():
     )
 
     # Introdução de Título
-    label_titulo = Label(
+    label_titulo = ttk.Label(
         frame_titulo,
         text='Título: '
     )
     label_titulo.pack(
         side=LEFT
     )
-    entry_titulo = Entry(
+    entry_titulo = ttk.Entry(
         frame_titulo
     )
     entry_titulo.pack(
@@ -97,7 +97,7 @@ def criar_janela():
     )
 
     # Frame Introdução de Autor
-    frame_autor = Frame(
+    frame_autor = ttk.Frame(
         frame_principal,
     )
     frame_autor.pack(
@@ -106,14 +106,14 @@ def criar_janela():
     )
 
     # Introdução de Autor
-    label_autor = Label(
+    label_autor = ttk.Label(
         frame_autor,
         text='Autor: '
     )
     label_autor.pack(
         side=LEFT
     )
-    entry_autor = Entry(
+    entry_autor = ttk.Entry(
         frame_autor
     )
     entry_autor.pack(
@@ -123,7 +123,7 @@ def criar_janela():
     )
 
     # Frame Introdução de Editora
-    frame_editora = Frame(
+    frame_editora = ttk.Frame(
         frame_principal,
     )
     frame_editora.pack(
@@ -132,14 +132,14 @@ def criar_janela():
     )
 
     # Introdução de Editora
-    label_editora = Label(
+    label_editora = ttk.Label(
         frame_editora,
         text='Editora: '
     )
     label_editora.pack(
         side=LEFT
     )
-    entry_editora = Entry(
+    entry_editora = ttk.Entry(
         frame_editora
     )
     entry_editora.pack(
@@ -149,7 +149,7 @@ def criar_janela():
     )
 
     # Frame Introdução de Publicação
-    frame_publicacao = Frame(
+    frame_publicacao = ttk.Frame(
         frame_principal,
     )
     frame_publicacao.pack(
@@ -158,14 +158,14 @@ def criar_janela():
     )
 
     # Introdução de Publicação
-    label_publicacao = Label(
+    label_publicacao = ttk.Label(
         frame_publicacao,
         text='Data Publicação: '
     )
     label_publicacao.pack(
         side=LEFT
     )
-    entry_publicacao = Entry(
+    entry_publicacao = ttk.Entry(
         frame_publicacao
     )
     entry_publicacao.pack(
@@ -175,7 +175,7 @@ def criar_janela():
     )
 
     # Frame Introdução de Genre
-    frame_genero = Frame(
+    frame_genero = ttk.Frame(
         frame_principal,
     )
     frame_genero.pack(
@@ -184,14 +184,14 @@ def criar_janela():
     )
 
     # Introdução de Genero
-    label_genero = Label(
+    label_genero = ttk.Label(
         frame_genero,
         text='Género: '
     )
     label_genero.pack(
         side=LEFT
     )
-    entry_genero = Entry(
+    entry_genero = ttk.Entry(
         frame_genero
     )
     entry_genero.pack(
@@ -201,7 +201,7 @@ def criar_janela():
     )
 
     # Frame isbn
-    frame_isbn = Frame(
+    frame_isbn = ttk.Frame(
         frame_principal,
     )
     frame_isbn.pack(
@@ -210,14 +210,14 @@ def criar_janela():
     )
 
     # Introdução do isbn
-    label_isbn = Label(
+    label_isbn = ttk.Label(
         frame_isbn,
         text='ISBN: '
     )
     label_isbn.pack(
         side=LEFT
     )
-    entry_isbn = Entry(
+    entry_isbn = ttk.Entry(
         frame_isbn
     )
     entry_isbn.pack(
@@ -227,7 +227,7 @@ def criar_janela():
     )
 
     # Frame Botões
-    frame_botoes = Frame(
+    frame_botoes = ttk.Frame(
         frame_principal,
     )
     frame_botoes.pack(
@@ -242,7 +242,7 @@ def criar_janela():
         )
 
     # Botões Submeter Cancelar
-    botao_add = Button(
+    botao_add = ttk.Button(
         frame_botoes,
         text='Adicionar Livro',
         command=lambda: adicionar_livro(
@@ -254,7 +254,7 @@ def criar_janela():
             entry_isbn
         )
     )
-    botao_cancel = Button(
+    botao_cancel = ttk.Button(
         frame_botoes,
         text='Cancelar',
         command=lambda: add_window.destroy()

@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from ttkthemes import themed_tk
 import addbookwindow
 import removewindow
 import conexao
@@ -75,7 +76,9 @@ def entregar_livro():
 def criar_janela():
 
     # Janela
-    window = Tk()
+    window = themed_tk.ThemedTk(
+        theme='arc'
+    )
     window.title('Biblioteca Escolar')
     window.minsize(
         1024,
@@ -139,10 +142,9 @@ def criar_janela():
     )
 
     # Frame Principal
-    frame_principal = Frame(
+    frame_principal = ttk.Frame(
         window,
-        padx=5,
-        pady=5
+        padding=5
     )
     frame_principal.pack(
         fill=BOTH,
@@ -150,7 +152,7 @@ def criar_janela():
     )
 
     # Frame Logotipo
-    frame_logotipo = Frame(
+    frame_logotipo = ttk.Frame(
         frame_principal,
     )
     frame_logotipo.pack(
@@ -163,10 +165,9 @@ def criar_janela():
     logotipo = PhotoImage(
         file='./imagens/logo4.png'
     )
-    logotipo_label = Label(
+    logotipo_label = ttk.Label(
         frame_logotipo,
         image=logotipo,
-        height=120
     )
     logotipo_label.pack(
         side=TOP,
@@ -176,7 +177,7 @@ def criar_janela():
     )
 
     # Frame Lista Entregas Pendentes / Atrasadas
-    frame_delivery = Frame(
+    frame_delivery = ttk.Frame(
         frame_principal,
     )
     frame_delivery.pack(
@@ -189,7 +190,7 @@ def criar_janela():
         )
 
     # Lista Entregas Pendentes
-    label_pending = Label(
+    label_pending = ttk.Label(
         frame_delivery,
         text='Entregas pendentes para hoje:'
     )
@@ -208,7 +209,7 @@ def criar_janela():
     )
 
     # Lista Entregas Atrasadas
-    label_behind = Label(
+    label_behind = ttk.Label(
         frame_delivery,
         text='Entregas em atraso:'
     )
@@ -227,7 +228,7 @@ def criar_janela():
     )
 
     # Frame de  Entrada de Procuras
-    frame_search = Frame(
+    frame_search = ttk.Frame(
         frame_principal,
     )
     frame_search.pack(
@@ -235,14 +236,14 @@ def criar_janela():
     )
 
     # Entrada de Procuras
-    entry_search = Entry(
+    entry_search = ttk.Entry(
         frame_search,
     )
-    button_search = Button(
+    button_search = ttk.Button(
         frame_search,
         text='Pesquisar Livro',
         command=lambda: procurar_livro(entry_search, list_search),
-        padx=1
+        padding=5
     )
     entry_search.pack(
         side=LEFT,
@@ -258,7 +259,7 @@ def criar_janela():
     )
 
     # Frame Lista de Procuras
-    frame_search_list = Frame(
+    frame_search_list = ttk.Frame(
         frame_principal,
     )
     frame_search_list.pack(
@@ -281,7 +282,7 @@ def criar_janela():
     )
 
     # Frame Botões
-    frame_buttons = Frame(
+    frame_buttons = ttk.Frame(
         frame_principal,
     )
     frame_buttons.pack(
@@ -296,12 +297,12 @@ def criar_janela():
         )
 
     # Botões
-    button_add = Button(
+    button_add = ttk.Button(
         frame_buttons,
         text='Adicionar Requisição',
         command=lambda: requisitar_livro(list_search)
     )
-    button_deliver = Button(
+    button_deliver = ttk.Button(
         frame_buttons,
         text='Entregar Livro',
         command=entregar_livro

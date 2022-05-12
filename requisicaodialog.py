@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 import time
 import conexao
 
@@ -68,10 +69,9 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Frame Principal
-    frame_principal = Frame(
+    frame_principal = ttk.Frame(
         dialog_window,
-        padx=5,
-        pady=5
+        padding=5
     )
     frame_principal.pack(
         expand=TRUE,
@@ -79,7 +79,7 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Frame Titulo
-    frame_titulo = Frame(
+    frame_titulo = ttk.Frame(
         frame_principal
     )
     frame_titulo.pack(
@@ -88,14 +88,14 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Display Título
-    label_titulo = Label(
+    label_titulo = ttk.Label(
         frame_titulo,
         text='Título: '
     )
     label_titulo.pack(
         side=LEFT
     )
-    display_titulo = Label(
+    display_titulo = ttk.Label(
         frame_titulo,
         text=titulo_livro
     )
@@ -106,7 +106,7 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Frame Indtrodução ID aluno
-    frame_id_aluno = Frame(
+    frame_id_aluno = ttk.Frame(
         frame_principal
     )
     frame_id_aluno.pack(
@@ -115,14 +115,14 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Introdução ID aluno
-    lable_id_aluno = Label(
+    lable_id_aluno = ttk.Label(
         frame_id_aluno,
         text='ID Aluno: '
     )
     lable_id_aluno.pack(
         side=LEFT
     )
-    entry_id_aluno = Entry(
+    entry_id_aluno = ttk.Entry(
         frame_id_aluno
     )
     entry_id_aluno.pack(
@@ -132,7 +132,7 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Frame Data Requisição
-    frame_data_requisicao = Frame(
+    frame_data_requisicao = ttk.Frame(
         frame_principal
     )
     frame_data_requisicao.pack(
@@ -141,7 +141,7 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Display Data Requisição
-    label_data_requisicao = Label(
+    label_data_requisicao = ttk.Label(
         frame_data_requisicao,
         text='Data Requisição: '
     )
@@ -149,7 +149,7 @@ def criar_dialog(id_livro, titulo_livro):
         side=LEFT
     )
     current_time = time.strftime("%d %b %Y", time.localtime())
-    display_data_requisicao = Label(
+    display_data_requisicao = ttk.Label(
         frame_data_requisicao,
         text=current_time
     )
@@ -160,7 +160,7 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Frame Data Limite
-    frame_data_limite = Frame(
+    frame_data_limite = ttk.Frame(
         frame_principal
     )
     frame_data_limite.pack(
@@ -169,7 +169,7 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Display Data Limite
-    label_data_limite = Label(
+    label_data_limite = ttk.Label(
         frame_data_limite,
         text='Data de Entrega: '
     )
@@ -177,7 +177,7 @@ def criar_dialog(id_livro, titulo_livro):
         side=LEFT
     )
     limit_time = time.strftime("%d %b %Y", time.strptime(time.ctime(time.time() + 604800)))
-    display_data_limite = Label(
+    display_data_limite = ttk.Label(
         frame_data_limite,
         text=limit_time
     )
@@ -188,7 +188,7 @@ def criar_dialog(id_livro, titulo_livro):
     )
 
     # Frame Botões
-    frame_botoes = Frame(
+    frame_botoes = ttk.Frame(
         frame_principal,
     )
     frame_botoes.pack(
@@ -203,7 +203,7 @@ def criar_dialog(id_livro, titulo_livro):
         )
 
     # Botões Submeter Cancelar
-    botao_add = Button(
+    botao_add = ttk.Button(
         frame_botoes,
         text='Adicionar Livro',
         command=lambda: adicionar_requisicao(
@@ -212,7 +212,7 @@ def criar_dialog(id_livro, titulo_livro):
             entry_id_aluno,
         )
     )
-    botao_cancel = Button(
+    botao_cancel = ttk.Button(
         frame_botoes,
         text='Cancelar',
         command=lambda: dialog_window.destroy()
