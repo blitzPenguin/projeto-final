@@ -6,7 +6,7 @@ import conexao
 import requisicaodialog
 
 
-# Metodos
+# Funções
 
 
 def copy(window, entry_search):
@@ -28,10 +28,24 @@ def paste(window, entry_search):
     window.clipboard_clear()
 
 
-def procurar_livro(list_search):
+def procurar_livro(entry_search, list_search):
+    print(entry_search.get())
     con = conexao.connect()
     cursor = conexao.create_cursor(con)
-    conexao.query(cursor, 'SELECT * FROM LIVROS')
+    conexao.query(
+        cursor,
+        '''SELECT DISTINCT titulo, isbn, autor, editora, data_publicacao, Nome
+            FROM LIVROS, GENEROS
+            WHERE requisitado = \'0\'
+            AND
+            LIVROS.id_genero = GENEROS.id
+            AND
+            (Nome LIKE \'%'''+entry_search.get()+'''%\'
+            OR titulo LIKE \'%'''+entry_search.get()+'''%\'
+            OR autor LIKE \'%'''+entry_search.get()+'''%\'
+            OR editora LIKE \'%'''+entry_search.get()+'''%\'
+            OR data_publicacao LIKE \'%'''+entry_search.get()+'%\')'
+    )
     fetch = conexao.fetch(cursor)
     for i in list_search.get_children():
         list_search.delete(i)
@@ -39,11 +53,16 @@ def procurar_livro(list_search):
         list_search.insert('', END, values=i)
     con.close()
 
-
 def requisitar_livro(list_search):
-    id_livro = list_search.item(list_search.focus())['values'][0]
-    print(id_livro)
-    requisicaodialog.criar_dialog(id_livro, 'Titulo')
+    livro_selection = list_search.selection()
+    id_livro = []
+    titulo_livro = []
+    for i in range(len(livro_selection)):
+        id_livro.append(list_search.item(livro_selection[i])['values'][0])
+        titulo_livro.append(list_search.item(livro_selection[i])['values'][2])
+        print(id_livro[i])
+        print(titulo_livro[i])
+    requisicaodialog.criar_dialog(id_livro, titulo_livro)
 
 
 def entregar_livro():
@@ -74,8 +93,6 @@ def criar_janela():
         width=TRUE,
         height=TRUE
     )
-    style = ttk.Style(window)
-    style.theme_use('alt')
 
     # Barra Topo
     menubar = Menu(window)
@@ -224,7 +241,7 @@ def criar_janela():
     button_search = Button(
         frame_search,
         text='Pesquisar Livro',
-        command=lambda: procurar_livro(list_search),
+        command=lambda: procurar_livro(entry_search, list_search),
         padx=1
     )
     entry_search.pack(
@@ -249,7 +266,7 @@ def criar_janela():
     )
 
     # Lista de Procuras
-    columns = ('ID', 'ISBN', 'Titulo', 'Autor', 'Editora', 'Publicação', 'Género', 'Requesitado')
+    columns = ('Titulo', 'ISBN', 'Autor', 'Editora', 'Publicação', 'Género')
     list_search = ttk.Treeview(
         frame_search_list,
         columns=columns,

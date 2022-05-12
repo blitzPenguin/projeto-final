@@ -9,8 +9,6 @@ def adicionar_requisicao(
         dialog_window,
         id_livro,
         entry_id_aluno,
-        display_data_requisicao,
-        display_data_limite
 ):
     con = conexao.connect()
     cursor = conexao.create_cursor(con)
@@ -22,12 +20,30 @@ def adicionar_requisicao(
     except Exception:
         messagebox.showerror(title='Erro', message='Não foi possível criar a requisição')
         con.close()
+        dialog_window.destroy()
     else:
         if messagebox.askyesno(title='Confirmação', message='Deseja criar a requisição?'):
             con.commit()
-            messagebox.showinfo(title='Sucesso', message='Criou a requisição com sucesso')
-            con.close()
-            dialog_window.destroy()
+            query_statement = '''SELECT MAX(id) FROM REQUISICOES_HEADER'''
+            conexao.query(cursor, query_statement)
+            id_requisicao = cursor.fetchone()
+            try:
+                for i in id_livro:
+                    query_statement = '''INSERT INTO REQUISICOES_DESC (id_requisicao, id_livro)
+                        VALUES (\''''+str(id_requisicao[0])+'\', \''+str(i)+'\')'
+                    conexao.query(cursor, query_statement)
+                    query_statement = '''UPDATE LIVROS
+                        SET requisitado = 1
+                        WHERE id = \''''+str(i)+'\''
+                    conexao.query(cursor, query_statement)
+            except Exception:
+                messagebox.showerror(title='Erro', message='Não foi possível criar a requisição')
+                con.close()
+            else:
+                messagebox.showinfo(title='Sucesso', message='Criou a requisição com sucesso')
+                con.commit()
+                con.close()
+        dialog_window.destroy()
 
 
 
@@ -132,7 +148,7 @@ def criar_dialog(id_livro, titulo_livro):
     label_data_requisicao.pack(
         side=LEFT
     )
-    current_time = time.ctime(time.time())
+    current_time = time.strftime("%d %b %Y", time.localtime())
     display_data_requisicao = Label(
         frame_data_requisicao,
         text=current_time
@@ -160,7 +176,7 @@ def criar_dialog(id_livro, titulo_livro):
     label_data_limite.pack(
         side=LEFT
     )
-    limit_time = time.ctime(time.time() + 604800)
+    limit_time = time.strftime("%d %b %Y", time.strptime(time.ctime(time.time() + 604800)))
     display_data_limite = Label(
         frame_data_limite,
         text=limit_time
@@ -194,8 +210,6 @@ def criar_dialog(id_livro, titulo_livro):
             dialog_window,
             id_livro,
             entry_id_aluno,
-            display_data_requisicao,
-            display_data_limite,
         )
     )
     botao_cancel = Button(
