@@ -11,9 +11,9 @@ def adicionar_requisicao(
         id_livro,
         entry_id_aluno,
 ):
-    con = conexao.connect()
-    cursor = conexao.create_cursor(con)
     try:
+        con = conexao.connect()
+        cursor = conexao.create_cursor(con)
         id_aluno = entry_id_aluno.get()
         query_statement = '''INSERT INTO REQUISICOES_HEADER (id_aluno, data_limite)
             VALUES (\''''+id_aluno+'\', DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 7 DAY))'''
@@ -34,7 +34,7 @@ def adicionar_requisicao(
                         VALUES (\''''+str(id_requisicao[0])+'\', \''+str(i)+'\')'
                     conexao.query(cursor, query_statement)
                     query_statement = '''UPDATE LIVROS
-                        SET requisitado = 1
+                        SET id_requisitado = 1
                         WHERE id = \''''+str(i)+'\''
                     conexao.query(cursor, query_statement)
             except Exception:

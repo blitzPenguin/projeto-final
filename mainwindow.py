@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from tkinter import ttk
 from ttkthemes import themed_tk
 import addbookwindow
@@ -35,11 +36,11 @@ def procurar_livro(entry_search, list_search):
     cursor = conexao.create_cursor(con)
     conexao.query(
         cursor,
-        '''SELECT DISTINCT titulo, isbn, autor, editora, data_publicacao, Nome
-            FROM LIVROS, GENEROS
-            WHERE requisitado = \'0\'
+        '''SELECT DISTINCT titulo, isbn, autor, editora, data_publicacao, Nome, REQUISITADO.designacao, LIVROS.id
+            FROM LIVROS, GENEROS, LIVROS_GENEROS, REQUISITADO
+            WHERE LIVROS_GENEROS.id_livro = LIVROS.id
             AND
-            LIVROS.id_genero = GENEROS.id
+            LIVROS.id_requisitado = REQUISITADO.id
             AND
             (Nome LIKE \'%'''+entry_search.get()+'''%\'
             OR titulo LIKE \'%'''+entry_search.get()+'''%\'
@@ -54,20 +55,42 @@ def procurar_livro(entry_search, list_search):
         list_search.insert('', END, values=i)
     con.close()
 
+
 def requisitar_livro(list_search):
     livro_selection = list_search.selection()
     id_livro = []
     titulo_livro = []
     for i in range(len(livro_selection)):
-        id_livro.append(list_search.item(livro_selection[i])['values'][0])
-        titulo_livro.append(list_search.item(livro_selection[i])['values'][2])
-        print(id_livro[i])
-        print(titulo_livro[i])
+        id_livro.append(list_search.item(livro_selection[i])['values'][7])
+        titulo_livro.append(list_search.item(livro_selection[i])['values'][0])
     requisicaodialog.criar_dialog(id_livro, titulo_livro)
 
 
-def entregar_livro():
-    pass
+def entregar_livro(list_search):
+    livro_selection = list_search.selection()
+    id_livro = []
+    titulo_livro = []
+    for i in range(len(livro_selection)):
+        id_livro.append(list_search.item(livro_selection[i])['values'][7])
+        titulo_livro.append(list_search.item(livro_selection[i])['values'][0])
+    if messagebox.askyesno(title='Confirmar Entrega', message='Deseja entregar o(s) livro(s) '+str(titulo_livro)+' ?'):
+        try:
+            con = conexao.connect()
+            cursor = conexao.create_cursor(con)
+            for i in id_livro:
+                query_statement = '''UPDATE REQUISICOES_HEADER, DESCRICOES_DESC
+                    SET devolvido = 1 WHERE REQUISICOES_HEADER.id = DESCRICOES_DESC.id_requisicao
+                    AND DESCRICOES_DESC.id_livro = \''''+str(i)+'''\';
+                    UPDATE LIVROS
+                    SET id_requisitado = 2 WHERE id = \''''+str(i)+'\''
+                conexao.query(cursor, query_statement)
+        except Exception:
+            messagebox.showerror(title='Erro', message='Não foi possível Entregar o(s) livro(s)')
+            con.close()
+        else:
+            con.commit()
+            messagebox.showinfo(title='Sucesso', message='Entrega concluida')
+            con.close()
 
 
 # Função construtora
@@ -77,7 +100,7 @@ def criar_janela():
 
     # Janela
     window = themed_tk.ThemedTk(
-        theme='arc'
+        theme='breeze'
     )
     window.title('Biblioteca Escolar')
     window.minsize(
@@ -168,12 +191,12 @@ def criar_janela():
     logotipo_label = ttk.Label(
         frame_logotipo,
         image=logotipo,
+        anchor=CENTER
     )
     logotipo_label.pack(
         side=TOP,
         expand=TRUE,
-        fill=BOTH,
-        anchor=CENTER
+        fill=X,
     )
 
     # Frame Lista Entregas Pendentes / Atrasadas
@@ -250,7 +273,6 @@ def criar_janela():
         anchor=NW,
         fill=X,
         expand=TRUE,
-        pady=5
     )
     button_search.pack(
         side=LEFT,
@@ -267,7 +289,7 @@ def criar_janela():
     )
 
     # Lista de Procuras
-    columns = ('Titulo', 'ISBN', 'Autor', 'Editora', 'Publicação', 'Género')
+    columns = ('Titulo', 'ISBN', 'Autor', 'Editora', 'Publicação', 'Género', 'Requisitado')
     list_search = ttk.Treeview(
         frame_search_list,
         columns=columns,
@@ -305,7 +327,7 @@ def criar_janela():
     button_deliver = ttk.Button(
         frame_buttons,
         text='Entregar Livro',
-        command=entregar_livro
+        command=lambda: entregar_livro(list_search)
     )
     button_add.grid(
         row=0,
