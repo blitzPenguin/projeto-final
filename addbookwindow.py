@@ -16,14 +16,16 @@ def adicionar_livro(
     con = conexao.connect()
     cursor = conexao.create_cursor(con)
     try:
-        titulo = entry_titulo.get()
-        autor = entry_autor.get()
-        editora = entry_editora.get()
-        publicacao = entry_publicacao.get()
-        genero = entry_genero.get()
-        isbn = entry_isbn.get()
-        query_statement = '''INSERT INTO LIVROS (isbn, titulo, autor, editora, data_publicacao, id_genero)
-            VALUES (\''''+isbn+'\', \''+titulo+'\', \''+autor+'\', \''+editora+'\', \''+publicacao+'\', \''+genero+'\')'
+        query_statement = '''INSERT INTO LIVROS (isbn, titulo, autor, editora, data_publicacao)
+            VALUES (\''''+entry_isbn.get()+'\', \''+entry_titulo.get()+'\', \''+entry_autor.get()+'\', \''+entry_editora.get()+'\', \''+entry_publicacao.get()+'\')'
+        conexao.query(cursor, query_statement)
+        query_statement = '''SELECT MAX(id) FROM LIVROS'''
+        conexao.query(cursor, query_statement)
+        id_livro = cursor.fetchone()
+        print(id_livro[0])
+        print(entry_genero.get())
+        query_statement = '''INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
+            VALUES (\''''+str(id_livro[0])+'\', \''+entry_genero.get()+'\')'
         conexao.query(cursor, query_statement)
     except Exception:
         messagebox.showerror(title='Erro', message='Não foi possivel adicionar o livro à base de dados')

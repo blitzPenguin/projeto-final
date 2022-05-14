@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+from turtle import heading
 from ttkthemes import themed_tk
 import addbookwindow
 import removewindow
@@ -30,23 +31,77 @@ def paste(window, entry_search):
     window.clipboard_clear()
 
 
+def requisicoes_pendentes(list_pending):
+    con = conexao.connect()
+    cursor = conexao.create_cursor(con)
+    conexao.query(
+        cursor,
+        '''SELECT ALUNOS.nome, titulo, data_req, data_limite 
+        FROM ALUNOS, LIVROS, REQUISICOES_HEADER, REQUISICOES_DESC
+        WHERE
+        ALUNOS.id = REQUISICOES_HEADER.id_aluno
+        AND
+        LIVROS.id = REQUISICOES_DESC.id_livro
+        AND
+        REQUISICOES_HEADER.id = REQUISICOES_DESC.id_requisicao
+        AND
+        REQUISICOES_DESC.devolvido = 0
+        '''
+    )
+    fetch = cursor.fetchall()
+    for i in list_pending.get_children():
+        list_pending.delete(i)
+    for i in fetch:
+        list_pending.insert('', END, values=i)
+    con.close()
+
+def requisicoes_atrasadas(list_behind):
+    con = conexao.connect()
+    cursor = conexao.create_cursor(con)
+    conexao.query(
+        cursor,
+        '''SELECT ALUNOS.nome, titulo, data_req, data_limite 
+        FROM ALUNOS, LIVROS, REQUISICOES_HEADER, REQUISICOES_DESC
+        WHERE
+        ALUNOS.id = REQUISICOES_HEADER.id_aluno
+        AND
+        LIVROS.id = REQUISICOES_DESC.id_livro
+        AND
+        REQUISICOES_HEADER.id = REQUISICOES_DESC.id_requisicao
+        AND
+        REQUISICOES_DESC.devolvido = 0
+        AND
+        REQUISICOES_HEADER.data_limite < DATE(NOW())
+        '''
+    )
+    fetch = cursor.fetchall()
+    for i in list_behind.get_children():
+        list_behind.delete(i)
+    for i in fetch:
+        list_behind.insert('', END, values=i)
+    con.close()
+
+
 def procurar_livro(entry_search, list_search):
     print(entry_search.get())
     con = conexao.connect()
     cursor = conexao.create_cursor(con)
     conexao.query(
         cursor,
-        '''SELECT DISTINCT titulo, isbn, autor, editora, data_publicacao, Nome, REQUISITADO.designacao, LIVROS.id
+        '''SELECT DISTINCT titulo, isbn, autor, editora, data_publicacao, GENEROS.designacao, REQUISITADO.designacao, LIVROS.id
             FROM LIVROS, GENEROS, LIVROS_GENEROS, REQUISITADO
             WHERE LIVROS_GENEROS.id_livro = LIVROS.id
             AND
+            GENEROS.id = LIVROS_GENEROS.id_genero
+            AND
             LIVROS.id_requisitado = REQUISITADO.id
             AND
-            (Nome LIKE \'%'''+entry_search.get()+'''%\'
-            OR titulo LIKE \'%'''+entry_search.get()+'''%\'
+            (titulo LIKE \'%'''+entry_search.get()+'''%\'
             OR autor LIKE \'%'''+entry_search.get()+'''%\'
             OR editora LIKE \'%'''+entry_search.get()+'''%\'
-            OR data_publicacao LIKE \'%'''+entry_search.get()+'%\')'
+            OR data_publicacao LIKE \'%'''+entry_search.get()+'''%\'
+            OR GENEROS.designacao LIKE \'%'''+entry_search.get()+'''%\')
+            GROUP BY LIVROS.titulo'''
     )
     fetch = conexao.fetch(cursor)
     for i in list_search.get_children():
@@ -54,43 +109,21 @@ def procurar_livro(entry_search, list_search):
     for i in fetch:
         list_search.insert('', END, values=i)
     con.close()
+    
 
 
-def requisitar_livro(list_search):
+def requisitar_livro(list_search, list_pending):
     livro_selection = list_search.selection()
     id_livro = []
     titulo_livro = []
     for i in range(len(livro_selection)):
         id_livro.append(list_search.item(livro_selection[i])['values'][7])
         titulo_livro.append(list_search.item(livro_selection[i])['values'][0])
-    requisicaodialog.criar_dialog(id_livro, titulo_livro)
+    requisicaodialog.criar_dialog(id_livro, titulo_livro, list_pending)
+    
 
-
-def entregar_livro(list_search):
-    livro_selection = list_search.selection()
-    id_livro = []
-    titulo_livro = []
-    for i in range(len(livro_selection)):
-        id_livro.append(list_search.item(livro_selection[i])['values'][7])
-        titulo_livro.append(list_search.item(livro_selection[i])['values'][0])
-    if messagebox.askyesno(title='Confirmar Entrega', message='Deseja entregar o(s) livro(s) '+str(titulo_livro)+' ?'):
-        try:
-            con = conexao.connect()
-            cursor = conexao.create_cursor(con)
-            for i in id_livro:
-                query_statement = '''UPDATE REQUISICOES_HEADER, DESCRICOES_DESC
-                    SET devolvido = 1 WHERE REQUISICOES_HEADER.id = DESCRICOES_DESC.id_requisicao
-                    AND DESCRICOES_DESC.id_livro = \''''+str(i)+'''\';
-                    UPDATE LIVROS
-                    SET id_requisitado = 2 WHERE id = \''''+str(i)+'\''
-                conexao.query(cursor, query_statement)
-        except Exception:
-            messagebox.showerror(title='Erro', message='Não foi possível Entregar o(s) livro(s)')
-            con.close()
-        else:
-            con.commit()
-            messagebox.showinfo(title='Sucesso', message='Entrega concluida')
-            con.close()
+def entregar_livro(list_pending, list_behind):
+    pass
 
 
 # Função construtora
@@ -215,21 +248,29 @@ def criar_janela():
     # Lista Entregas Pendentes
     label_pending = ttk.Label(
         frame_delivery,
-        text='Entregas pendentes para hoje:'
+        text='Entregas pendentes:'
     )
     label_pending.grid(
         row=0,
         column=0,
         sticky=N
     )
-    list_pending = Listbox(
-        frame_delivery
+    columns = ('Aluno', 'Titulo', 'Data Requisicao', 'Data Limite')
+    list_pending = ttk.Treeview(
+        frame_delivery,
+        columns=columns,
+        show='headings',
+        selectmode=EXTENDED
     )
+    for i in columns:
+        list_pending.heading(i, text=i)
+        list_pending.column(i, width=10, anchor=CENTER)
     list_pending.grid(
         row=1,
         column=0,
         sticky=NSEW
     )
+    requisicoes_pendentes(list_pending)
 
     # Lista Entregas Atrasadas
     label_behind = ttk.Label(
@@ -241,14 +282,21 @@ def criar_janela():
         column=1,
         sticky=N
     )
-    list_behind = Listbox(
-        frame_delivery
+    list_behind = ttk.Treeview(
+        frame_delivery,
+        columns=columns,
+        show='headings',
+        selectmode=EXTENDED
     )
+    for i in columns:
+        list_behind.heading(i, text=i)
+        list_behind.column(i, width=10, anchor=CENTER)
     list_behind.grid(
         row=1,
         column=1,
         sticky=NSEW
     )
+    requisicoes_atrasadas(list_behind)
 
     # Frame de  Entrada de Procuras
     frame_search = ttk.Frame(
@@ -261,6 +309,7 @@ def criar_janela():
     # Entrada de Procuras
     entry_search = ttk.Entry(
         frame_search,
+        validatecommand=lambda: procurar_livro(entry_search, list_search)
     )
     button_search = ttk.Button(
         frame_search,
@@ -294,7 +343,7 @@ def criar_janela():
         frame_search_list,
         columns=columns,
         show='headings',
-        selectmode='extended',
+        selectmode=EXTENDED,
     )
     for i in columns:
         list_search.heading(i, text=i)
@@ -322,12 +371,12 @@ def criar_janela():
     button_add = ttk.Button(
         frame_buttons,
         text='Adicionar Requisição',
-        command=lambda: requisitar_livro(list_search)
+        command=lambda: requisitar_livro(list_search, list_pending)
     )
     button_deliver = ttk.Button(
         frame_buttons,
         text='Entregar Livro',
-        command=lambda: entregar_livro(list_search)
+        command=lambda: entregar_livro(list_pending, list_behind)
     )
     button_add.grid(
         row=0,

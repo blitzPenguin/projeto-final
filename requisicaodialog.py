@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+import mainwindow
 import time
 import conexao
 
@@ -10,6 +11,7 @@ def adicionar_requisicao(
         dialog_window,
         id_livro,
         entry_id_aluno,
+        list_pending
 ):
     try:
         con = conexao.connect()
@@ -34,7 +36,7 @@ def adicionar_requisicao(
                         VALUES (\''''+str(id_requisicao[0])+'\', \''+str(i)+'\')'
                     conexao.query(cursor, query_statement)
                     query_statement = '''UPDATE LIVROS
-                        SET id_requisitado = 1
+                        SET id_requisitado = 2
                         WHERE id = \''''+str(i)+'\''
                     conexao.query(cursor, query_statement)
             except Exception:
@@ -44,14 +46,15 @@ def adicionar_requisicao(
                 messagebox.showinfo(title='Sucesso', message='Criou a requisição com sucesso')
                 con.commit()
                 con.close()
-        dialog_window.destroy()
+                mainwindow.requisicoes_pendentes(list_pending)
+    dialog_window.destroy()
 
 
 
 # Função criadora de janela
 
 
-def criar_dialog(id_livro, titulo_livro):
+def criar_dialog(id_livro, titulo_livro, list_pending):
     dialog_window = Toplevel()
     dialog_window.title(
         'Janela Requisição'
@@ -210,6 +213,7 @@ def criar_dialog(id_livro, titulo_livro):
             dialog_window,
             id_livro,
             entry_id_aluno,
+            list_pending
         )
     )
     botao_cancel = ttk.Button(
