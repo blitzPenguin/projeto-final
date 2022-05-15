@@ -1,54 +1,11 @@
+# requisicaodialog.py #
+# Função referente à construção da janela que regista as requisições de livros #
+
+
 from tkinter import *
-from tkinter import messagebox
 from tkinter import ttk
-import mainwindow
 import time
-import conexao
-
-
-# Função Submissão Requisição
-def adicionar_requisicao(
-        dialog_window,
-        id_livro,
-        entry_id_aluno,
-        list_pending
-):
-    try:
-        con = conexao.connect()
-        cursor = conexao.create_cursor(con)
-        id_aluno = entry_id_aluno.get()
-        query_statement = '''INSERT INTO REQUISICOES_HEADER (id_aluno, data_limite)
-            VALUES (\''''+id_aluno+'\', DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 7 DAY))'''
-        conexao.query(cursor, query_statement)
-    except Exception:
-        messagebox.showerror(title='Erro', message='Não foi possível criar a requisição')
-        con.close()
-        dialog_window.destroy()
-    else:
-        if messagebox.askyesno(title='Confirmação', message='Deseja criar a requisição?'):
-            con.commit()
-            query_statement = '''SELECT MAX(id) FROM REQUISICOES_HEADER'''
-            conexao.query(cursor, query_statement)
-            id_requisicao = cursor.fetchone()
-            try:
-                for i in id_livro:
-                    query_statement = '''INSERT INTO REQUISICOES_DESC (id_requisicao, id_livro)
-                        VALUES (\''''+str(id_requisicao[0])+'\', \''+str(i)+'\')'
-                    conexao.query(cursor, query_statement)
-                    query_statement = '''UPDATE LIVROS
-                        SET id_requisitado = 2
-                        WHERE id = \''''+str(i)+'\''
-                    conexao.query(cursor, query_statement)
-            except Exception:
-                messagebox.showerror(title='Erro', message='Não foi possível criar a requisição')
-                con.close()
-            else:
-                messagebox.showinfo(title='Sucesso', message='Criou a requisição com sucesso')
-                con.commit()
-                con.close()
-                mainwindow.requisicoes_pendentes(list_pending)
-    dialog_window.destroy()
-
+import funcoes
 
 
 # Função criadora de janela
@@ -209,7 +166,7 @@ def criar_dialog(id_livro, titulo_livro, list_pending):
     botao_add = ttk.Button(
         frame_botoes,
         text='Adicionar Livro',
-        command=lambda: adicionar_requisicao(
+        command=lambda: funcoes.adicionar_requisicao(
             dialog_window,
             id_livro,
             entry_id_aluno,
@@ -219,7 +176,7 @@ def criar_dialog(id_livro, titulo_livro, list_pending):
     botao_cancel = ttk.Button(
         frame_botoes,
         text='Cancelar',
-        command=lambda: dialog_window.destroy()
+        command=dialog_window.destroy
     )
     botao_add.grid(
         row=0,

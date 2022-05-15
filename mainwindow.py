@@ -1,129 +1,13 @@
+# mainwindow.py #
+# Função referente à criação da janela principal #
+
+
 from tkinter import *
-from tkinter import messagebox
 from tkinter import ttk
-from turtle import heading
 from ttkthemes import themed_tk
 import addbookwindow
+import funcoes
 import removewindow
-import conexao
-import requisicaodialog
-
-
-# Funções
-
-
-def copy(window, entry_search):
-    window.clipboard_clear()
-    window.clipboard_append(entry_search.selection_get())
-
-
-def cut(window, entry_search):
-    window.clipboard_clear()
-    window.clipboard_append(entry_search.selection_get())
-    if entry_search.index(ANCHOR) < entry_search.index(INSERT):
-        entry_search.delete(ANCHOR, INSERT)
-    elif entry_search.index(INSERT) < entry_search.index(ANCHOR):
-        entry_search.delete(INSERT, ANCHOR)
-
-
-def paste(window, entry_search):
-    entry_search.insert(entry_search.index(INSERT), window.clipboard_get())
-    window.clipboard_clear()
-
-
-def requisicoes_pendentes(list_pending):
-    con = conexao.connect()
-    cursor = conexao.create_cursor(con)
-    conexao.query(
-        cursor,
-        '''SELECT ALUNOS.nome, titulo, data_req, data_limite 
-        FROM ALUNOS, LIVROS, REQUISICOES_HEADER, REQUISICOES_DESC
-        WHERE
-        ALUNOS.id = REQUISICOES_HEADER.id_aluno
-        AND
-        LIVROS.id = REQUISICOES_DESC.id_livro
-        AND
-        REQUISICOES_HEADER.id = REQUISICOES_DESC.id_requisicao
-        AND
-        REQUISICOES_DESC.devolvido = 0
-        '''
-    )
-    fetch = cursor.fetchall()
-    for i in list_pending.get_children():
-        list_pending.delete(i)
-    for i in fetch:
-        list_pending.insert('', END, values=i)
-    con.close()
-
-def requisicoes_atrasadas(list_behind):
-    con = conexao.connect()
-    cursor = conexao.create_cursor(con)
-    conexao.query(
-        cursor,
-        '''SELECT ALUNOS.nome, titulo, data_req, data_limite 
-        FROM ALUNOS, LIVROS, REQUISICOES_HEADER, REQUISICOES_DESC
-        WHERE
-        ALUNOS.id = REQUISICOES_HEADER.id_aluno
-        AND
-        LIVROS.id = REQUISICOES_DESC.id_livro
-        AND
-        REQUISICOES_HEADER.id = REQUISICOES_DESC.id_requisicao
-        AND
-        REQUISICOES_DESC.devolvido = 0
-        AND
-        REQUISICOES_HEADER.data_limite < DATE(NOW())
-        '''
-    )
-    fetch = cursor.fetchall()
-    for i in list_behind.get_children():
-        list_behind.delete(i)
-    for i in fetch:
-        list_behind.insert('', END, values=i)
-    con.close()
-
-
-def procurar_livro(entry_search, list_search):
-    print(entry_search.get())
-    con = conexao.connect()
-    cursor = conexao.create_cursor(con)
-    conexao.query(
-        cursor,
-        '''SELECT DISTINCT titulo, isbn, autor, editora, data_publicacao, GENEROS.designacao, REQUISITADO.designacao, LIVROS.id
-            FROM LIVROS, GENEROS, LIVROS_GENEROS, REQUISITADO
-            WHERE LIVROS_GENEROS.id_livro = LIVROS.id
-            AND
-            GENEROS.id = LIVROS_GENEROS.id_genero
-            AND
-            LIVROS.id_requisitado = REQUISITADO.id
-            AND
-            (titulo LIKE \'%'''+entry_search.get()+'''%\'
-            OR autor LIKE \'%'''+entry_search.get()+'''%\'
-            OR editora LIKE \'%'''+entry_search.get()+'''%\'
-            OR data_publicacao LIKE \'%'''+entry_search.get()+'''%\'
-            OR GENEROS.designacao LIKE \'%'''+entry_search.get()+'''%\')
-            GROUP BY LIVROS.titulo'''
-    )
-    fetch = conexao.fetch(cursor)
-    for i in list_search.get_children():
-        list_search.delete(i)
-    for i in fetch:
-        list_search.insert('', END, values=i)
-    con.close()
-    
-
-
-def requisitar_livro(list_search, list_pending):
-    livro_selection = list_search.selection()
-    id_livro = []
-    titulo_livro = []
-    for i in range(len(livro_selection)):
-        id_livro.append(list_search.item(livro_selection[i])['values'][7])
-        titulo_livro.append(list_search.item(livro_selection[i])['values'][0])
-    requisicaodialog.criar_dialog(id_livro, titulo_livro, list_pending)
-    
-
-def entregar_livro(list_pending, list_behind):
-    pass
 
 
 # Função construtora
@@ -185,16 +69,16 @@ def criar_janela():
         menu=edit_menu,
     )
     edit_menu.add_command(
-        label='Copy',
-        command=lambda: copy(window, entry_search)
+        label='Copiar',
+        command=lambda: funcoes.copiar(window, entry_search)
     )
     edit_menu.add_command(
-        label='Cut',
-        command=lambda: cut(window, entry_search)
+        label='Cortar',
+        command=lambda: funcoes.cortar(window, entry_search)
     )
     edit_menu.add_command(
-        label='Paste',
-        command=lambda: paste(window, entry_search)
+        label='Colar',
+        command=lambda: funcoes.colar(window, entry_search)
     )
 
     # Frame Principal
@@ -270,7 +154,7 @@ def criar_janela():
         column=0,
         sticky=NSEW
     )
-    requisicoes_pendentes(list_pending)
+    funcoes.requisicoes_pendentes(list_pending)
 
     # Lista Entregas Atrasadas
     label_behind = ttk.Label(
@@ -296,7 +180,7 @@ def criar_janela():
         column=1,
         sticky=NSEW
     )
-    requisicoes_atrasadas(list_behind)
+    funcoes.requisicoes_atrasadas(list_behind)
 
     # Frame de  Entrada de Procuras
     frame_search = ttk.Frame(
@@ -309,12 +193,11 @@ def criar_janela():
     # Entrada de Procuras
     entry_search = ttk.Entry(
         frame_search,
-        validatecommand=lambda: procurar_livro(entry_search, list_search)
     )
     button_search = ttk.Button(
         frame_search,
         text='Pesquisar Livro',
-        command=lambda: procurar_livro(entry_search, list_search),
+        command=lambda: funcoes.procurar_livro(entry_search, list_search),
         padding=5
     )
     entry_search.pack(
@@ -338,7 +221,7 @@ def criar_janela():
     )
 
     # Lista de Procuras
-    columns = ('Titulo', 'ISBN', 'Autor', 'Editora', 'Publicação', 'Género', 'Requisitado')
+    columns = ('Titulo', 'Autor', 'Editora', 'Publicação', 'Género', 'ISBN', 'Requisitado')
     list_search = ttk.Treeview(
         frame_search_list,
         columns=columns,
@@ -371,19 +254,21 @@ def criar_janela():
     button_add = ttk.Button(
         frame_buttons,
         text='Adicionar Requisição',
-        command=lambda: requisitar_livro(list_search, list_pending)
+        command=lambda: funcoes.requisitar_livro_dialog(list_search, list_pending)
     )
     button_deliver = ttk.Button(
         frame_buttons,
         text='Entregar Livro',
-        command=lambda: entregar_livro(list_pending, list_behind)
+        command=lambda: funcoes.entregar_livro(list_pending, list_behind)
     )
     button_add.grid(
         row=0,
-        column=0
+        column=0,
+        pady=7
     )
     button_deliver.grid(
         row=0,
-        column=1
+        column=1,
+        pady=7
     )
     window.mainloop()

@@ -1,45 +1,10 @@
+# addbookwindow.py #
+# Função referente à criação da janela de adição de livros à base de dados #
+
+
 from tkinter import *
-from tkinter import messagebox
 from tkinter import ttk
-import conexao
-
-
-# Função submissão Novo Livro
-def adicionar_livro(
-        entry_titulo,
-        entry_autor,
-        entry_editora,
-        entry_publicacao,
-        entry_genero,
-        entry_isbn
-):
-    con = conexao.connect()
-    cursor = conexao.create_cursor(con)
-    try:
-        query_statement = '''INSERT INTO LIVROS (isbn, titulo, autor, editora, data_publicacao)
-            VALUES (\''''+entry_isbn.get()+'\', \''+entry_titulo.get()+'\', \''+entry_autor.get()+'\', \''+entry_editora.get()+'\', \''+entry_publicacao.get()+'\')'
-        conexao.query(cursor, query_statement)
-        query_statement = '''SELECT MAX(id) FROM LIVROS'''
-        conexao.query(cursor, query_statement)
-        id_livro = cursor.fetchone()
-        print(id_livro[0])
-        print(entry_genero.get())
-        query_statement = '''INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
-            VALUES (\''''+str(id_livro[0])+'\', \''+entry_genero.get()+'\')'
-        conexao.query(cursor, query_statement)
-    except Exception:
-        messagebox.showerror(title='Erro', message='Não foi possivel adicionar o livro à base de dados')
-        con.close()
-    else:
-        if messagebox.askyesno(title='Confirmação', message='Tem a certeza que quer adicionar o livro à base de dados?'):
-            con.commit()
-            entry_isbn.delete(0, END)
-            entry_titulo.delete(0, END)
-            entry_autor.delete(0, END)
-            entry_editora.delete(0, END)
-            entry_publicacao.delete(0, END)
-            entry_genero.delete(0, END)
-        con.close()
+import funcoes
 
 
 # Função construtora
@@ -51,15 +16,15 @@ def criar_janela():
     add_window = Toplevel()
     add_window.title('Adicionar Livro')
     add_window.geometry(
-        '400x300'
+        '600x400'
     )
     add_window.minsize(
-        400,
-        300
+        600,
+        400
     )
     add_window.maxsize(
-        400,
-        300
+        600,
+        400
     )
 
     # Frame Principal
@@ -247,7 +212,8 @@ def criar_janela():
     botao_add = ttk.Button(
         frame_botoes,
         text='Adicionar Livro',
-        command=lambda: adicionar_livro(
+        command=lambda: funcoes.adicionar_livro(
+            add_window,
             entry_titulo,
             entry_autor,
             entry_editora,
@@ -259,7 +225,7 @@ def criar_janela():
     botao_cancel = ttk.Button(
         frame_botoes,
         text='Cancelar',
-        command=lambda: add_window.destroy()
+        command=add_window.destroy
     )
     botao_add.grid(
         row=0,
@@ -270,4 +236,3 @@ def criar_janela():
         column=1
     )
     add_window.mainloop()
-
