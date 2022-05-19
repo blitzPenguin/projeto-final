@@ -41,6 +41,8 @@ def query_req_pendentes(
         INNER JOIN LIVROS
         ON LIVROS.id = REQUISICOES_DESC.id_livro
         WHERE REQUISICOES_HEADER.data_limite >= DATE(NOW())
+        AND
+        REQUISICOES_DESC.devolvido = 0
         '''
     )
 
@@ -61,6 +63,8 @@ def query_req_atrasadas(
         INNER JOIN LIVROS
         ON LIVROS.id = REQUISICOES_DESC.id_livro
         WHERE REQUISICOES_HEADER.data_limite < DATE(NOW())
+        AND
+        REQUISICOES_DESC.devolvido = 0
         '''
     )
 
@@ -108,22 +112,34 @@ def query_adicionar_livro(
     )
 
 
+def query_listar_generos(
+        cursor,
+):
+    cursor.execute(
+        '''
+        SELECT GENEROS.designacao from GENEROS
+        '''
+    )
+    return cursor.fetchall()
+
+
 def query_adicionar_genero(
         cursor,
         genero
 ):
-    cursor.execute(
-        '''
-        SELECT MAX(id) FROM LIVROS
-        '''
-    )
-    livro = cursor.fetchone()
-    cursor.execute(
-        '''
-        INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
-        VALUES (\''''+str(livro[0])+'\', \''+genero.get()+'''\')
-        '''
-    )
+    if not genero.get() in genero['values']:
+        cursor.execute(
+            '''
+            SELECT MAX(id) FROM LIVROS
+            '''
+        )
+        livro = cursor.fetchone()
+        cursor.execute(
+            '''
+            INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
+            VALUES (\''''+str(livro[0])+'\', \''+genero.get()+'''\')
+            '''
+        )
 
 
 def query_remover_livro(
@@ -185,7 +201,7 @@ def query_entregar_livro(
         UPDATE REQUISICOES_DESC, LIVROS
         SET REQUISICOES_DESC.devolvido = 1,
         LIVROS.id_requisitado = 1
-        WHERE id_livro = \''''+str(livro)+'''\'
+        WHERE REQUISICOES_DESC.id_livro = \''''+str(livro)+'''\'
         AND
         LIVROS.id = \''''+str(livro)+'''\'
         '''

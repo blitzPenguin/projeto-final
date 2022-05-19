@@ -15,15 +15,15 @@ def criar_janela():
     # Criar janela toplevel
     janela_remover = Toplevel()
     janela_remover.geometry(
-        '450x300'
+        '600x400'
     )
     janela_remover.minsize(
-        450,
-        300
+        600,
+        400
     )
     janela_remover.maxsize(
-        450,
-        300
+        600,
+        400
     )
 
     # Frame Principal

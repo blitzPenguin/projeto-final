@@ -234,8 +234,7 @@ def adicionar_requisicao(
 
 
 def entrega_livro(
-        lista,
-        *args
+        lista
 ):
     livro = selecao_livros(
         lista,
@@ -243,7 +242,7 @@ def entrega_livro(
     )
     titulo = selecao_livros(
         lista,
-        1
+        2
     )
     if messagebox.askyesno('Confirmação', 'Deseja entregas o(s) seguinte(s) livro(s): ' + str(titulo)):
         try:
@@ -263,12 +262,6 @@ def entrega_livro(
                     cursor,
                     i
                 )
-            # multa = 1
-            # if any(vars(args).values()):
-                # messagebox.showwarning(
-                # 'Multa',
-                # 'Pagamento de multa: '+str(multa)+' €'
-                # )
             try:
                 con.commit()
             except Exception as e:
@@ -309,11 +302,28 @@ def entregar_livro(
     if len(lista_atrasadas.selection()) != 0:
         entrega_livro(
             lista_atrasadas,
-            1
         )
         requisicoes_atrasadas(
             lista_atrasadas
         )
+
+
+# Função para listar os géneros
+
+def lista_generos():
+    try:
+        con = conexao.connect()
+        cursor = conexao.cursor(con)
+    except Exception as e:
+        print(e)
+        messagebox.showerror(
+            title='Erro',
+            message='Erro de conexão à base de dados'
+        )
+    else:
+        resultado = conexao.query_listar_generos(cursor)
+        con.close()
+        return resultado
 
 
 # Função para adição de livros
@@ -413,7 +423,6 @@ def remover_livro(
                         cursor,
                         i
                     )
-                    print(i)
                 try:
                     con.commit()
                 except Exception as e:

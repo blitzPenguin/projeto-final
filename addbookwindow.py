@@ -16,15 +16,15 @@ def criar_janela():
     janela_adicionar = Toplevel()
     janela_adicionar.title('Adicionar Livro')
     janela_adicionar.geometry(
-        '450x300'
+        '600x400'
     )
     janela_adicionar.minsize(
-        450,
-        300
+        600,
+        400
     )
     janela_adicionar.maxsize(
-        450,
-        300
+        600,
+        400
     )
 
     # Frame Principal
@@ -141,7 +141,7 @@ def criar_janela():
         fill=X
     )
 
-    # Frame Introdução de Genre
+    # Frame Introdução de Genero
     frame_genero = ttk.Frame(
         frame_principal,
     )
@@ -158,9 +158,10 @@ def criar_janela():
     label_genero.pack(
         side=LEFT
     )
-    entrada_genero = ttk.Entry(
+    entrada_genero = ttk.Combobox(
         frame_genero
     )
+    entrada_genero['values'] = funcoes.lista_generos()
     entrada_genero.pack(
         side=RIGHT,
         expand=TRUE,
