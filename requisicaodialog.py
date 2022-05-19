@@ -12,25 +12,25 @@ import funcoes
 
 
 def criar_dialog(id_livro, titulo_livro, list_pending):
-    dialog_window = Toplevel()
-    dialog_window.title(
+    janela_dialogo = Toplevel()
+    janela_dialogo.title(
         'Janela Requisição'
     )
-    dialog_window.geometry(
+    janela_dialogo.geometry(
         '400x300'
     )
-    dialog_window.minsize(
+    janela_dialogo.minsize(
         400,
         300
     )
-    dialog_window.maxsize(
+    janela_dialogo.maxsize(
         400,
         300
     )
 
     # Frame Principal
     frame_principal = ttk.Frame(
-        dialog_window,
+        janela_dialogo,
         padding=5
     )
     frame_principal.pack(
@@ -82,10 +82,10 @@ def criar_dialog(id_livro, titulo_livro, list_pending):
     lable_id_aluno.pack(
         side=LEFT
     )
-    entry_id_aluno = ttk.Entry(
+    entrada_id_aluno = ttk.Entry(
         frame_id_aluno
     )
-    entry_id_aluno.pack(
+    entrada_id_aluno.pack(
         side=RIGHT,
         expand=TRUE,
         fill=X
@@ -163,28 +163,28 @@ def criar_dialog(id_livro, titulo_livro, list_pending):
         )
 
     # Botões Submeter Cancelar
-    botao_add = ttk.Button(
+    botao_aceitar = ttk.Button(
         frame_botoes,
         text='Adicionar Livro',
         command=lambda: funcoes.adicionar_requisicao(
-            dialog_window,
+            janela_dialogo,
             id_livro,
-            entry_id_aluno,
+            entrada_id_aluno,
             list_pending
         )
     )
-    botao_cancel = ttk.Button(
+    botao_cancelar = ttk.Button(
         frame_botoes,
         text='Cancelar',
-        command=dialog_window.destroy
+        command=janela_dialogo.destroy
     )
-    botao_add.grid(
+    botao_aceitar.grid(
         row=0,
         column=0
     )
-    botao_cancel.grid(
+    botao_cancelar.grid(
         row=0,
         column=1
     )
 
-    dialog_window.mainloop()
+    janela_dialogo.mainloop()

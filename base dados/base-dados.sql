@@ -85,8 +85,8 @@ INSERT INTO TURMAS (designacao) VALUES	('9ºA'),
 INSERT INTO ALUNOS (nome, id_turma, email) VALUES	('João', 1, 'joao@notmail.com'),
 													('Pedro', 2, 'pedro@notmail.com');
 
-INSERT INTO REQUISITADO (designacao) VALUES	('Falso'),
-											('Verdadeiro');
+INSERT INTO REQUISITADO (designacao) VALUES	('Não Requisitado'),
+											('Requisitado');
 
 INSERT INTO GENEROS (designacao) VALUES	('Terror'),
 										('Comedia');

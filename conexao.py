@@ -30,18 +30,17 @@ def query_req_pendentes(
 ):
     cursor.execute(
         '''
-        SELECT ALUNOS.nome, titulo, data_req, data_limite, LIVROS.id
-        FROM ALUNOS, LIVROS, REQUISICOES_HEADER, REQUISICOES_DESC
-        WHERE
-        ALUNOS.id = REQUISICOES_HEADER.id_aluno
-        AND
-        LIVROS.id = REQUISICOES_DESC.id_livro
-        AND
-        REQUISICOES_HEADER.id = REQUISICOES_DESC.id_requisicao
-        AND
-        REQUISICOES_DESC.devolvido = 0
-        AND
-        REQUISICOES_HEADER.data_limite >= DATE(NOW())
+        SELECT ALUNOS.nome, TURMAS.designacao, LIVROS.titulo, REQUISICOES_HEADER.data_limite, LIVROS.id
+        FROM ALUNOS
+        INNER JOIN TURMAS
+        ON TURMAS.id = ALUNOS.id_turma
+        INNER JOIN REQUISICOES_HEADER
+        ON REQUISICOES_HEADER.id_aluno = ALUNOS.id
+        INNER JOIN REQUISICOES_DESC
+        ON REQUISICOES_DESC.id_requisicao = REQUISICOES_HEADER.id
+        INNER JOIN LIVROS
+        ON LIVROS.id = REQUISICOES_DESC.id_livro
+        WHERE REQUISICOES_HEADER.data_limite >= DATE(NOW())
         '''
     )
 
@@ -51,18 +50,17 @@ def query_req_atrasadas(
 ):
     cursor.execute(
         '''
-        SELECT ALUNOS.nome, titulo, data_req, data_limite, LIVROS.id
-        FROM ALUNOS, LIVROS, REQUISICOES_HEADER, REQUISICOES_DESC
-        WHERE
-        ALUNOS.id = REQUISICOES_HEADER.id_aluno
-        AND
-        LIVROS.id = REQUISICOES_DESC.id_livro
-        AND
-        REQUISICOES_HEADER.id = REQUISICOES_DESC.id_requisicao
-        AND
-        REQUISICOES_DESC.devolvido = 0
-        AND
-        REQUISICOES_HEADER.data_limite < DATE(NOW())
+        SELECT ALUNOS.nome, TURMAS.designacao, LIVROS.titulo, REQUISICOES_HEADER.data_limite, LIVROS.id
+        FROM ALUNOS
+        INNER JOIN TURMAS
+        ON TURMAS.id = ALUNOS.id_turma
+        INNER JOIN REQUISICOES_HEADER
+        ON REQUISICOES_HEADER.id_aluno = ALUNOS.id
+        INNER JOIN REQUISICOES_DESC
+        ON REQUISICOES_DESC.id_requisicao = REQUISICOES_HEADER.id
+        INNER JOIN LIVROS
+        ON LIVROS.id = REQUISICOES_DESC.id_livro
+        WHERE REQUISICOES_HEADER.data_limite < DATE(NOW())
         '''
     )
 
@@ -73,22 +71,22 @@ def query_pesquisa(
 ):
     cursor.execute(
         '''
-        SELECT DISTINCT titulo,autor,editora,data_publicacao,GENEROS.designacao,isbn,REQUISITADO.designacao,LIVROS.id
-        FROM LIVROS, GENEROS, LIVROS_GENEROS, REQUISITADO
-        WHERE LIVROS_GENEROS.id_livro = LIVROS.id
-        AND
-        GENEROS.id = LIVROS_GENEROS.id_genero
-        AND
-        LIVROS.id_requisitado = REQUISITADO.id
-        AND
-        ativo = 1
-        AND
-        (titulo LIKE \'%'''+entrada.get()+'''%\'
-        OR autor LIKE \'%'''+entrada.get()+'''%\'
-        OR editora LIKE \'%'''+entrada.get()+'''%\'
-        OR data_publicacao LIKE \'%'''+entrada.get()+'''%\'
-        OR GENEROS.designacao LIKE \'%'''+entrada.get()+'''%\')
-        ORDER BY titulo ASC
+        SELECT LIVROS.titulo, LIVROS.autor, LIVROS.editora, LIVROS.data_publicacao, GENEROS.designacao, LIVROS.isbn,
+        REQUISITADO.designacao, LIVROS.id
+        FROM LIVROS
+        INNER JOIN LIVROS_GENEROS
+        ON LIVROS_GENEROS.id_livro = LIVROS.id
+        INNER JOIN GENEROS
+        ON GENEROS.id = LIVROS_GENEROS.id_genero
+        INNER JOIN REQUISITADO
+        ON REQUISITADO.id = LIVROS.id_requisitado
+        WHERE (LIVROS.titulo LIKE \'%'''+entrada.get()+'''%\'
+        OR LIVROS.autor LIKE \'%'''+entrada.get()+'''%\'
+        OR LIVROS.editora LIKE \'%'''+entrada.get()+'''%\'
+        OR LIVROS.data_publicacao LIKE \'%'''+entrada.get()+'''%\'
+        OR GENEROS.designacao LIKE \'%'''+entrada.get()+'''%\'
+        OR LIVROS.isbn LIKE \''''+entrada.get()+'''%\')
+        ORDER BY LIVROS.titulo ASC
         '''
     )
 

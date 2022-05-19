@@ -16,79 +16,104 @@ import removewindow
 def criar_janela():
 
     # Janela
-    window = themed_tk.ThemedTk(
+    janela = themed_tk.ThemedTk(
         theme='breeze'
     )
-    window.title('Biblioteca Escolar')
-    window.minsize(
+    janela.title('Biblioteca Escolar')
+    janela.minsize(
         1024,
         768
     )
-    if window.winfo_screenheight() >= 900:
-        window.geometry(
+    if janela.winfo_screenheight() >= 900:
+        janela.geometry(
             '1200x900'
         )
     else:
-        window.geometry(
+        janela.geometry(
             '1024x768'
         )
-    window.resizable(
+    janela.resizable(
         width=TRUE,
         height=TRUE
     )
 
     # Barra Topo
-    menubar = Menu(window)
-    window.config(menu=menubar)
-    file_menu = Menu(
-        menubar,
+    barra_menu = Menu(janela)
+    janela.config(menu=barra_menu)
+    menu_ficheiro = Menu(
+        barra_menu,
         tearoff=0,
     )
-    edit_menu = Menu(
-        menubar,
+    menu_editar = Menu(
+        barra_menu,
         tearoff=0,
     )
-    menubar.add_cascade(
-        label='File',
-        menu=file_menu,
+    barra_menu.add_cascade(
+        label='Ficheiro',
+        menu=menu_ficheiro,
     )
-    file_menu.add_command(
+    menu_ficheiro.add_command(
         label='Acrescentar Livro',
         command=lambda: addbookwindow.criar_janela()
     )
-    file_menu.add_command(
+    menu_ficheiro.add_command(
         label='Remover Livro',
         command=lambda: removewindow.criar_janela()
     )
-    file_menu.add_command(
+    menu_ficheiro.add_command(
         label='Sair',
         command=quit,
     )
-    menubar.add_cascade(
-        label='Edit',
-        menu=edit_menu,
+    barra_menu.add_cascade(
+        label='Editar',
+        menu=menu_editar,
     )
-    edit_menu.add_command(
+    menu_editar.add_command(
         label='Copiar',
-        command=lambda: funcoes.copiar(window, entry_search)
+        command=lambda: funcoes.copiar(janela, entrada_pesquisa)
     )
-    edit_menu.add_command(
+    menu_editar.add_command(
         label='Cortar',
-        command=lambda: funcoes.cortar(window, entry_search)
+        command=lambda: funcoes.cortar(janela, entrada_pesquisa)
     )
-    edit_menu.add_command(
+    menu_editar.add_command(
         label='Colar',
-        command=lambda: funcoes.colar(window, entry_search)
+        command=lambda: funcoes.colar(janela, entrada_pesquisa)
     )
+
+    # Menu Botão Lado Direito Rato
+    menu_lado_direito = Menu(
+        janela,
+        tearoff=0
+    )
+    menu_lado_direito.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela, entrada_pesquisa)
+    )
+    menu_lado_direito.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela, entrada_pesquisa)
+    )
+    menu_lado_direito.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela, entrada_pesquisa)
+    )
+
+    def botao_direito(event):
+        try:
+            menu_lado_direito.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito.grab_release()
 
     # Frame Principal
     frame_principal = ttk.Frame(
-        window,
+        janela,
         padding=5
     )
     frame_principal.pack(
         fill=BOTH,
-        expand=TRUE
+        expand=TRUE,
+        anchor=CENTER
     )
 
     # Frame Logotipo
@@ -98,177 +123,195 @@ def criar_janela():
     frame_logotipo.pack(
         side=TOP,
         expand=TRUE,
-        fill=BOTH
+        fill=BOTH,
+        anchor=CENTER
     )
 
     # Label logótipo
     logotipo = PhotoImage(
         file='./imagens/logo4.png'
     )
-    logotipo_label = ttk.Label(
+    label_logotipo = ttk.Label(
         frame_logotipo,
         image=logotipo,
         anchor=CENTER
     )
-    logotipo_label.pack(
+    label_logotipo.pack(
         side=TOP,
         expand=TRUE,
-        fill=X,
+        fill=BOTH,
     )
 
     # Frame Lista Entregas Pendentes / Atrasadas
-    frame_delivery = ttk.Frame(
+    frame_pendentes = ttk.Frame(
         frame_principal,
     )
-    frame_delivery.pack(
-        fill=BOTH
+    frame_pendentes.pack(
+        expand=TRUE,
+        fill=BOTH,
+        anchor=CENTER
     )
-    for j in range(2):
-        frame_delivery.grid_columnconfigure(
-            j,
+    for i in range(2):
+        frame_pendentes.grid_columnconfigure(
+            i,
             weight=1
         )
 
     # Lista Entregas Pendentes
-    label_pending = ttk.Label(
-        frame_delivery,
+    label_pendentes = ttk.Label(
+        frame_pendentes,
         text='Entregas pendentes:'
     )
-    label_pending.grid(
+    label_pendentes.grid(
         row=0,
         column=0,
         sticky=N
     )
-    columns = ('Aluno', 'Titulo', 'Data Requisicao', 'Data Limite')
-    list_pending = ttk.Treeview(
-        frame_delivery,
-        columns=columns,
+    colunas = ('Aluno', 'Turma', 'Titulo do Livro', 'Data Limite')
+    lista_pendentes = ttk.Treeview(
+        frame_pendentes,
+        columns=colunas,
         show='headings',
+        height=5,
         selectmode=EXTENDED
     )
-    for i in columns:
-        list_pending.heading(i, text=i)
-        list_pending.column(i, width=10, anchor=CENTER)
-    list_pending.grid(
+    for i in colunas:
+        lista_pendentes.heading(i, text=i)
+        lista_pendentes.column(i, width=10, anchor=CENTER)
+    lista_pendentes.grid(
         row=1,
         column=0,
         sticky=NSEW
     )
-    funcoes.requisicoes_pendentes(list_pending)
+    funcoes.requisicoes_pendentes(lista_pendentes)
 
     # Lista Entregas Atrasadas
-    label_behind = ttk.Label(
-        frame_delivery,
+    label_atrasadas = ttk.Label(
+        frame_pendentes,
         text='Entregas em atraso:'
     )
-    label_behind.grid(
+    label_atrasadas.grid(
         row=0,
         column=1,
         sticky=N
     )
-    list_behind = ttk.Treeview(
-        frame_delivery,
-        columns=columns,
+    lista_atrasadas = ttk.Treeview(
+        frame_pendentes,
+        columns=colunas,
         show='headings',
+        height=5,
         selectmode=EXTENDED
     )
-    for i in columns:
-        list_behind.heading(i, text=i)
-        list_behind.column(i, width=10, anchor=CENTER)
-    list_behind.grid(
+    for i in colunas:
+        lista_atrasadas.heading(i, text=i)
+        lista_atrasadas.column(i, width=10, anchor=CENTER)
+    lista_atrasadas.grid(
         row=1,
         column=1,
         sticky=NSEW
     )
-    funcoes.requisicoes_atrasadas(list_behind)
+    funcoes.requisicoes_atrasadas(lista_atrasadas)
 
     # Frame de  Entrada de Procuras
-    frame_search = ttk.Frame(
+    frame_pesquisa = ttk.Frame(
         frame_principal,
     )
-    frame_search.pack(
-        fill=BOTH
+    frame_pesquisa.pack(
+        fill=BOTH,
+        expand=TRUE,
+        anchor=CENTER
     )
 
     # Entrada de Procuras
-    entry_search = ttk.Entry(
-        frame_search,
+    label_pesquisa = ttk.Label(
+        frame_pesquisa,
+        text='Pesquisa de livros'
     )
-    button_search = ttk.Button(
-        frame_search,
+    label_pesquisa.pack(
+        side=TOP,
+        anchor=N
+    )
+    entrada_pesquisa = ttk.Entry(
+        frame_pesquisa,
+    )
+    botao_pesquisa = ttk.Button(
+        frame_pesquisa,
         text='Pesquisar Livro',
-        command=lambda: funcoes.procurar_livro(entry_search, list_search),
+        command=lambda: funcoes.procurar_livro(entrada_pesquisa, lista_pesquisa),
         padding=5
     )
-    entry_search.pack(
+    entrada_pesquisa.pack(
         side=LEFT,
         anchor=NW,
         fill=X,
         expand=TRUE,
     )
-    button_search.pack(
+    entrada_pesquisa.bind("<Button-3>", botao_direito)
+    botao_pesquisa.pack(
         side=LEFT,
         anchor=NE,
         expand=FALSE,
     )
 
     # Frame Lista de Procuras
-    frame_search_list = ttk.Frame(
+    frame_pesquisa_lista = ttk.Frame(
         frame_principal,
     )
-    frame_search_list.pack(
-        fill=BOTH
+    frame_pesquisa_lista.pack(
+        fill=BOTH,
+        expand=TRUE,
+        anchor=CENTER
     )
 
     # Lista de Procuras
-    columns = ('Titulo', 'Autor', 'Editora', 'Publicação', 'Género', 'ISBN', 'Requisitado')
-    list_search = ttk.Treeview(
-        frame_search_list,
-        columns=columns,
+    colunas = ('Titulo', 'Autor', 'Editora', 'Publicação', 'Género', 'ISBN', 'Requisitado')
+    lista_pesquisa = ttk.Treeview(
+        frame_pesquisa_lista,
+        columns=colunas,
         show='headings',
+        height=5,
         selectmode=EXTENDED,
     )
-    for i in columns:
-        list_search.heading(i, text=i)
-        list_search.column(i, width=10, anchor='center')
-    list_search.pack(
+    for i in colunas:
+        lista_pesquisa.heading(i, text=i)
+        lista_pesquisa.column(i, width=10, anchor='center')
+    lista_pesquisa.pack(
         fill=X
     )
 
     # Frame Botões
-    frame_buttons = ttk.Frame(
+    frame_botoes = ttk.Frame(
         frame_principal,
     )
-    frame_buttons.pack(
+    frame_botoes.pack(
         anchor=CENTER,
         side=BOTTOM,
-        fill=X
+        fill=BOTH,
+        expand=TRUE
     )
-    for j in range(2):
-        frame_buttons.grid_columnconfigure(
-            j,
+    for i in range(2):
+        frame_botoes.grid_columnconfigure(
+            i,
             weight=1
         )
 
     # Botões
-    button_add = ttk.Button(
-        frame_buttons,
+    botao_add = ttk.Button(
+        frame_botoes,
         text='Adicionar Requisição',
-        command=lambda: funcoes.requisitar_livro_dialog(list_search, list_pending)
+        command=lambda: funcoes.requisitar_livro_dialog(lista_pesquisa, lista_pendentes)
     )
-    button_deliver = ttk.Button(
-        frame_buttons,
+    botao_deliver = ttk.Button(
+        frame_botoes,
         text='Entregar Livro',
-        command=lambda: funcoes.entregar_livro(list_pending, list_behind)
+        command=lambda: funcoes.entregar_livro(lista_pendentes, lista_atrasadas)
     )
-    button_add.grid(
+    botao_add.grid(
         row=0,
         column=0,
-        pady=7
     )
-    button_deliver.grid(
+    botao_deliver.grid(
         row=0,
         column=1,
-        pady=7
     )
-    window.mainloop()
+    janela.mainloop()

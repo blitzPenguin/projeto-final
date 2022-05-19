@@ -13,23 +13,23 @@ import funcoes
 def criar_janela():
 
     # Criar janela toplevel
-    add_window = Toplevel()
-    add_window.title('Adicionar Livro')
-    add_window.geometry(
-        '600x400'
+    janela_adicionar = Toplevel()
+    janela_adicionar.title('Adicionar Livro')
+    janela_adicionar.geometry(
+        '450x300'
     )
-    add_window.minsize(
-        600,
-        400
+    janela_adicionar.minsize(
+        450,
+        300
     )
-    add_window.maxsize(
-        600,
-        400
+    janela_adicionar.maxsize(
+        450,
+        300
     )
 
     # Frame Principal
     frame_principal = ttk.Frame(
-        add_window,
+        janela_adicionar,
         padding=5
     )
     frame_principal.pack(
@@ -54,10 +54,10 @@ def criar_janela():
     label_titulo.pack(
         side=LEFT
     )
-    entry_titulo = ttk.Entry(
+    entrada_titulo = ttk.Entry(
         frame_titulo
     )
-    entry_titulo.pack(
+    entrada_titulo.pack(
         side=RIGHT,
         expand=TRUE,
         fill=X
@@ -80,10 +80,10 @@ def criar_janela():
     label_autor.pack(
         side=LEFT
     )
-    entry_autor = ttk.Entry(
+    entrada_autor = ttk.Entry(
         frame_autor
     )
-    entry_autor.pack(
+    entrada_autor.pack(
         side=RIGHT,
         expand=TRUE,
         fill=X
@@ -106,10 +106,10 @@ def criar_janela():
     label_editora.pack(
         side=LEFT
     )
-    entry_editora = ttk.Entry(
+    entrada_editora = ttk.Entry(
         frame_editora
     )
-    entry_editora.pack(
+    entrada_editora.pack(
         side=RIGHT,
         expand=TRUE,
         fill=X
@@ -132,10 +132,10 @@ def criar_janela():
     label_publicacao.pack(
         side=LEFT
     )
-    entry_publicacao = ttk.Entry(
+    entrada_publicacao = ttk.Entry(
         frame_publicacao
     )
-    entry_publicacao.pack(
+    entrada_publicacao.pack(
         side=RIGHT,
         expand=TRUE,
         fill=X
@@ -158,10 +158,10 @@ def criar_janela():
     label_genero.pack(
         side=LEFT
     )
-    entry_genero = ttk.Entry(
+    entrada_genero = ttk.Entry(
         frame_genero
     )
-    entry_genero.pack(
+    entrada_genero.pack(
         side=RIGHT,
         expand=TRUE,
         fill=X
@@ -184,10 +184,10 @@ def criar_janela():
     label_isbn.pack(
         side=LEFT
     )
-    entry_isbn = ttk.Entry(
+    entrada_isbn = ttk.Entry(
         frame_isbn
     )
-    entry_isbn.pack(
+    entrada_isbn.pack(
         side=RIGHT,
         expand=TRUE,
         fill=X
@@ -202,37 +202,183 @@ def criar_janela():
         side=BOTTOM,
         fill=X
     )
-    for j in range(2):
+    for i in range(2):
         frame_botoes.grid_columnconfigure(
-            j,
+            i,
             weight=1
         )
 
     # Botões Submeter Cancelar
-    botao_add = ttk.Button(
+    botao_adicionar = ttk.Button(
         frame_botoes,
         text='Adicionar Livro',
         command=lambda: funcoes.adicionar_livro(
-            add_window,
-            entry_titulo,
-            entry_autor,
-            entry_editora,
-            entry_publicacao,
-            entry_genero,
-            entry_isbn
+            janela_adicionar,
+            entrada_titulo,
+            entrada_autor,
+            entrada_editora,
+            entrada_publicacao,
+            entrada_genero,
+            entrada_isbn
         )
     )
-    botao_cancel = ttk.Button(
+    botao_cancelar = ttk.Button(
         frame_botoes,
         text='Cancelar',
-        command=add_window.destroy
+        command=janela_adicionar.destroy
     )
-    botao_add.grid(
+    botao_adicionar.grid(
         row=0,
         column=0
     )
-    botao_cancel.grid(
+    botao_cancelar.grid(
         row=0,
         column=1
     )
-    add_window.mainloop()
+
+    # Menu Botão Lado Direito Rato
+    menu_lado_direito_titulo = Menu(
+        janela_adicionar,
+        tearoff=0
+    )
+    menu_lado_direito_titulo.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela_adicionar, entrada_titulo)
+    )
+    menu_lado_direito_titulo.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela_adicionar, entrada_titulo)
+    )
+    menu_lado_direito_titulo.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela_adicionar, entrada_titulo)
+    )
+
+    def botao_direito_titulo(event):
+        try:
+            menu_lado_direito_titulo.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito_titulo.grab_release()
+
+    menu_lado_direito_autor = Menu(
+        janela_adicionar,
+        tearoff=0
+    )
+    menu_lado_direito_autor.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela_adicionar, entrada_autor)
+    )
+    menu_lado_direito_autor.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela_adicionar, entrada_autor)
+    )
+    menu_lado_direito_autor.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela_adicionar, entrada_autor)
+    )
+
+    def botao_direito_autor(event):
+        try:
+            menu_lado_direito_autor.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito_autor.grab_release()
+
+    menu_lado_direito_editora = Menu(
+        janela_adicionar,
+        tearoff=0
+    )
+    menu_lado_direito_editora.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela_adicionar, entrada_editora)
+    )
+    menu_lado_direito_editora.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela_adicionar, entrada_editora)
+    )
+    menu_lado_direito_editora.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela_adicionar, entrada_editora)
+    )
+
+    def botao_direito_editora(event):
+        try:
+            menu_lado_direito_editora.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito_editora.grab_release()
+
+    menu_lado_direito_publicacao = Menu(
+        janela_adicionar,
+        tearoff=0
+    )
+    menu_lado_direito_publicacao.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela_adicionar, entrada_publicacao)
+    )
+    menu_lado_direito_publicacao.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela_adicionar, entrada_publicacao)
+    )
+    menu_lado_direito_publicacao.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela_adicionar, entrada_publicacao)
+    )
+
+    def botao_direito_publicacao(event):
+        try:
+            menu_lado_direito_publicacao.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito_publicacao.grab_release()
+
+    menu_lado_direito_genero = Menu(
+        janela_adicionar,
+        tearoff=0
+    )
+    menu_lado_direito_genero.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela_adicionar, entrada_genero)
+    )
+    menu_lado_direito_genero.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela_adicionar, entrada_genero)
+    )
+    menu_lado_direito_genero.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela_adicionar, entrada_genero)
+    )
+
+    def botao_direito_genero(event):
+        try:
+            menu_lado_direito_genero.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito_genero.grab_release()
+
+    menu_lado_direito_isbn = Menu(
+        janela_adicionar,
+        tearoff=0
+    )
+    menu_lado_direito_isbn.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela_adicionar, entrada_isbn)
+    )
+    menu_lado_direito_isbn.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela_adicionar, entrada_isbn)
+    )
+    menu_lado_direito_isbn.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela_adicionar, entrada_isbn)
+    )
+
+    def botao_direito_isbn(event):
+        try:
+            menu_lado_direito_isbn.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito_isbn.grab_release()
+
+    entrada_titulo.bind("<Button-3>", botao_direito_titulo)
+    entrada_autor.bind("<Button-3>", botao_direito_autor)
+    entrada_editora.bind("<Button-3>", botao_direito_editora)
+    entrada_publicacao.bind("<Button-3>", botao_direito_publicacao)
+    entrada_genero.bind("<Button-3>", botao_direito_genero)
+    entrada_isbn.bind("<Button-3>", botao_direito_isbn)
+    janela_adicionar.mainloop()

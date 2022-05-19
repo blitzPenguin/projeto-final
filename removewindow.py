@@ -13,22 +13,22 @@ import funcoes
 def criar_janela():
 
     # Criar janela toplevel
-    remove_window = Toplevel()
-    remove_window.geometry(
-        '600x400'
+    janela_remover = Toplevel()
+    janela_remover.geometry(
+        '450x300'
     )
-    remove_window.minsize(
-        600,
-        400
+    janela_remover.minsize(
+        450,
+        300
     )
-    remove_window.maxsize(
-        600,
-        400
+    janela_remover.maxsize(
+        450,
+        300
     )
 
     # Frame Principal
     frame_principal = ttk.Frame(
-        remove_window,
+        janela_remover,
         padding=5
     )
     frame_principal.pack(
@@ -37,24 +37,24 @@ def criar_janela():
     )
 
     # Frame de  Entrada de Procuras
-    frame_search = ttk.Frame(
+    frame_pesquisa = ttk.Frame(
         frame_principal,
     )
-    frame_search.pack(
+    frame_pesquisa.pack(
         expand=TRUE,
         fill=BOTH
     )
 
     # Entrada de Procuras
-    entry_search = ttk.Entry(
-        frame_search
+    entrada_pesquisa = ttk.Entry(
+        frame_pesquisa
     )
     button_search = ttk.Button(
-        frame_search,
+        frame_pesquisa,
         text='Pesquisar Livro',
-        command=lambda: funcoes.procurar_livro(entry_search, list_search)
+        command=lambda: funcoes.procurar_livro(entrada_pesquisa, lista_pesquisa)
     )
-    entry_search.pack(
+    entrada_pesquisa.pack(
         side=LEFT,
         anchor=NW,
         fill=X,
@@ -68,26 +68,27 @@ def criar_janela():
     )
 
     # Frame Lista de Procuras
-    frame_search_list = ttk.Frame(
+    frame_pesquisa_lista = ttk.Frame(
         frame_principal,
     )
-    frame_search_list.pack(
+    frame_pesquisa_lista.pack(
         expand=TRUE,
         fill=BOTH
     )
 
     # Lista de Procuras
     colunas = ('Titulo', 'Autor', 'Editora', 'Publicação', 'Género', 'ISBN')
-    list_search = ttk.Treeview(
-        frame_search_list,
+    lista_pesquisa = ttk.Treeview(
+        frame_pesquisa_lista,
         columns=colunas,
         show='headings',
+        height=5,
         selectmode=EXTENDED,
     )
     for i in colunas:
-        list_search.heading(i, text=i)
-        list_search.column(i, width=10, anchor='center')
-    list_search.pack(
+        lista_pesquisa.heading(i, text=i)
+        lista_pesquisa.column(i, width=10, anchor='center')
+    lista_pesquisa.pack(
         fill=X
     )
 
@@ -108,25 +109,51 @@ def criar_janela():
         )
 
     # Botões
-    botao_remove = ttk.Button(
+    botao_remover = ttk.Button(
         frame_botoes,
         text='Remover Livro',
         command=lambda: funcoes.remover_livro(
-            remove_window,
-            list_search
+            janela_remover,
+            lista_pesquisa
         )
     )
-    botao_remove.grid(
+    botao_remover.grid(
         row=0,
         column=0
     )
-    botao_cancel = ttk.Button(
+    botao_cancelar = ttk.Button(
         frame_botoes,
         text='Cancelar',
-        command=remove_window.destroy
+        command=janela_remover.destroy
     )
-    botao_cancel.grid(
+    botao_cancelar.grid(
         row=0,
         column=1
     )
-    remove_window.mainloop()
+
+    # Menu Botão Lado Direito Rato
+    menu_lado_direito = Menu(
+        janela_remover,
+        tearoff=0
+    )
+    menu_lado_direito.add_command(
+        label="Copiar",
+        command=lambda: funcoes.copiar(janela_remover, entrada_pesquisa)
+    )
+    menu_lado_direito.add_command(
+        label="Cortar",
+        command=lambda: funcoes.cortar(janela_remover, entrada_pesquisa)
+    )
+    menu_lado_direito.add_command(
+        label="Colar",
+        command=lambda: funcoes.colar(janela_remover, entrada_pesquisa)
+    )
+
+    def botao_direito(event):
+        try:
+            menu_lado_direito.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu_lado_direito.grab_release()
+
+    entrada_pesquisa.bind("<Button-3>", botao_direito)
+    janela_remover.mainloop()

@@ -48,7 +48,6 @@ def colar(
         entrada.index(INSERT),
         janela.clipboard_get()
     )
-    janela.clipboard_clear()
 
 
 # Função que insere requisições pendentes na lista apropriada
