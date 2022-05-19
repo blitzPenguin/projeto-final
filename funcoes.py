@@ -365,7 +365,7 @@ def adicionar_livro(
         try:
             conexao.query_adicionar_genero(
                 cursor,
-                genero
+                genero,
             )
         except Exception as e:
             print(e)

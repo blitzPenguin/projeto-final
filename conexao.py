@@ -2,6 +2,7 @@
 # Funções e querys para conexão e operações entre o programa e a base de dados #
 
 import mysql.connector
+import funcoes
 
 
 # Conexão à base de dados #
@@ -127,7 +128,41 @@ def query_adicionar_genero(
         cursor,
         genero
 ):
-    if not genero.get() in genero['values']:
+    genero_values = funcoes.lista_generos()
+    num_generos = genero_values.count(str(genero.get()))
+    if num_generos > 0:
+        cursor.execute(
+            '''
+            SELECT GENEROS.id FROM GENEROS
+            WHERE GENEROS.designacao like \'''' + genero.get() + '''\'
+            '''
+        )
+        id_genero = cursor.fetchone()
+        cursor.execute(
+            '''
+            SELECT MAX(id) FROM GENEROS
+            '''
+        )
+        livro = cursor.fetchone()
+        cursor.execute(
+            '''
+            INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
+            VALUES (\''''+str(livro[0])+'\', \''+str(id_genero[0])+'''\')
+            '''
+        )
+    else:
+        cursor.execute(
+            '''
+            INSERT INTO GENEROS (designacao)
+            VALUES (\'''' + genero.get() + '''\')
+            '''
+        )
+        cursor.execute(
+            '''
+            SELECT MAX(id) FROM GENEROS
+            '''
+        )
+        id_genero = cursor.fetchone()
         cursor.execute(
             '''
             SELECT MAX(id) FROM LIVROS
@@ -137,9 +172,10 @@ def query_adicionar_genero(
         cursor.execute(
             '''
             INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
-            VALUES (\''''+str(livro[0])+'\', \''+genero.get()+'''\')
+            VALUES (\''''+str(livro[0])+'\', \''+str(id_genero[0])+'''\')
             '''
         )
+        
 
 
 def query_remover_livro(
