@@ -2,7 +2,6 @@
 # Funções e querys para conexão e operações entre o programa e a base de dados #
 
 import mysql.connector
-import funcoes
 
 
 # Conexão à base de dados #
@@ -85,13 +84,15 @@ def query_pesquisa(
         ON GENEROS.id = LIVROS_GENEROS.id_genero
         INNER JOIN REQUISITADO
         ON REQUISITADO.id = LIVROS.id_requisitado
-        WHERE (LIVROS.titulo LIKE \'%'''+entrada.get()+'''%\'
+        WHERE 
+        LIVROS.ativo = 1
+        AND
+        (LIVROS.titulo LIKE \'%'''+entrada.get()+'''%\'
         OR LIVROS.autor LIKE \'%'''+entrada.get()+'''%\'
         OR LIVROS.editora LIKE \'%'''+entrada.get()+'''%\'
         OR LIVROS.data_publicacao LIKE \'%'''+entrada.get()+'''%\'
         OR GENEROS.designacao LIKE \'%'''+entrada.get()+'''%\'
-        OR LIVROS.isbn LIKE \''''+entrada.get()+'''%\'
-        AND LIVROS.ativo = 1)
+        OR LIVROS.isbn LIKE \''''+entrada.get()+'''%\')
         ORDER BY LIVROS.titulo ASC
         '''
     )
@@ -136,7 +137,6 @@ def query_adicionar_genero(
         '''
     )
     id_genero = cursor.fetchone()
-    print(id_genero)
     if id_genero == None:
         cursor.execute(
             '''
@@ -184,8 +184,8 @@ def query_remover_livro(
     cursor.execute(
         '''
         UPDATE LIVROS
-        SET ativo = 0
-        WHERE id = \''''+str(livro)+'''\'
+        SET LIVROS.ativo = 0
+        WHERE LIVROS.id = \''''+str(livro)+'''\'
         '''
     )
 

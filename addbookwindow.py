@@ -3,6 +3,7 @@
 
 
 from tkinter import *
+from tkcalendar import *
 from tkinter import ttk
 import funcoes
 
@@ -127,14 +128,15 @@ def criar_janela():
     # Introdução de Publicação
     label_publicacao = ttk.Label(
         frame_publicacao,
-        text='Data Publicação: '
+        text='Ano de Publicação: '
     )
     label_publicacao.pack(
         side=LEFT
+    )   
+    entrada_publicacao = ttk.Combobox(
+        frame_publicacao,
     )
-    entrada_publicacao = ttk.Entry(
-        frame_publicacao
-    )
+    entrada_publicacao['values'] = funcoes.lista_anos()
     entrada_publicacao.pack(
         side=RIGHT,
         expand=TRUE,

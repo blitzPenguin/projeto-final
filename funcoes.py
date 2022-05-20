@@ -5,6 +5,7 @@ import conexao
 import requisicaodialog
 from tkinter import *
 from tkinter import messagebox
+import time
 
 
 # Funções de copiar, cortar e colar
@@ -324,6 +325,17 @@ def lista_generos():
         resultado = conexao.query_listar_generos(cursor)
         con.close()
         return resultado
+
+
+# Função para listar anos
+
+
+def lista_anos():
+    ano_corrente = time.strftime("%Y", time.localtime())
+    anos = []
+    for i in range(150):
+        anos.append(int(ano_corrente) - i)
+    return anos
 
 
 # Função para adição de livros
