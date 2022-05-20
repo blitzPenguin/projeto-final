@@ -90,7 +90,8 @@ def query_pesquisa(
         OR LIVROS.editora LIKE \'%'''+entrada.get()+'''%\'
         OR LIVROS.data_publicacao LIKE \'%'''+entrada.get()+'''%\'
         OR GENEROS.designacao LIKE \'%'''+entrada.get()+'''%\'
-        OR LIVROS.isbn LIKE \''''+entrada.get()+'''%\')
+        OR LIVROS.isbn LIKE \''''+entrada.get()+'''%\'
+        AND LIVROS.ativo = 1)
         ORDER BY LIVROS.titulo ASC
         '''
     )
@@ -128,29 +129,15 @@ def query_adicionar_genero(
         cursor,
         genero
 ):
-    genero_values = funcoes.lista_generos()
-    num_generos = genero_values.count(str(genero.get()))
-    if num_generos > 0:
-        cursor.execute(
-            '''
-            SELECT GENEROS.id FROM GENEROS
-            WHERE GENEROS.designacao like \'''' + genero.get() + '''\'
-            '''
-        )
-        id_genero = cursor.fetchone()
-        cursor.execute(
-            '''
-            SELECT MAX(id) FROM GENEROS
-            '''
-        )
-        livro = cursor.fetchone()
-        cursor.execute(
-            '''
-            INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
-            VALUES (\''''+str(livro[0])+'\', \''+str(id_genero[0])+'''\')
-            '''
-        )
-    else:
+    cursor.execute(
+        '''
+        SELECT GENEROS.id FROM GENEROS
+        WHERE GENEROS.designacao like \'''' + genero.get() + '''\'
+        '''
+    )
+    id_genero = cursor.fetchone()
+    print(id_genero)
+    if id_genero == None:
         cursor.execute(
             '''
             INSERT INTO GENEROS (designacao)
@@ -175,7 +162,19 @@ def query_adicionar_genero(
             VALUES (\''''+str(livro[0])+'\', \''+str(id_genero[0])+'''\')
             '''
         )
-        
+    else:
+        cursor.execute(
+            '''
+            SELECT MAX(id) FROM LIVROS
+            '''
+        )
+        livro = cursor.fetchone()
+        cursor.execute(
+            '''
+            INSERT INTO LIVROS_GENEROS (id_livro, id_genero)
+            VALUES (\''''+str(livro[0])+'\', \''+str(id_genero[0])+'''\')
+            '''
+        )
 
 
 def query_remover_livro(
