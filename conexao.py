@@ -98,6 +98,29 @@ def query_pesquisa(
     )
 
 
+def query_comparar_livro(
+    cursor,
+    titulo,
+    autor,
+    editora,
+    publicacao
+):
+    cursor.execute(
+        '''
+        SELECT LIVROS.id FROM LIVROS
+        WHERE
+        titulo LIKE \''''+titulo.get()+'''\'
+        AND
+        autor LIKE \''''+autor.get()+'''\'
+        AND
+        editora LIKE \''''+editora.get()+'''\'
+        AND
+        data_publicacao LIKE \''''+publicacao.get()+'''\'
+        '''
+    )
+
+
+
 def query_adicionar_livro(
         cursor,
         titulo,
@@ -113,6 +136,22 @@ def query_adicionar_livro(
         '''+publicacao.get()+'\', \''+isbn.get()+'''\')
         '''
     )
+
+
+def query_ativar_livro(
+    cursor,
+    livro,
+    isbn
+):
+    print(livro[0])
+    cursor.execute(
+        '''
+        UPDATE LIVROS
+        SET LIVROS.ativo = 1
+        WHERE LIVROS.id = \''''+str(livro[0])+'''\'
+        '''
+    )
+
 
 
 def query_listar_generos(

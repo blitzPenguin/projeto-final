@@ -352,53 +352,83 @@ def adicionar_livro(
 ):
     try:
         con = conexao.connect()
+        cursor = conexao.cursor(con)
     except Exception as e:
         print(e)
         messagebox.showerror(
-            'Erro',
-            'Erro de conexão à base de dados.'
+            title='Erro',
+            message='Erro de conexão à base de dados'
         )
     else:
-        cursor = conexao.cursor(
-            con
-        )
         try:
-            conexao.query_adicionar_livro(
-                cursor,
-                titulo,
-                autor,
-                editora,
-                publicacao,
-                isbn
+            conexao.query_comparar_livro(
+            cursor,
+            titulo,
+            autor,
+            editora,
+            publicacao
             )
         except Exception as e:
             print(e)
-            con.close()
-        try:
-            conexao.query_adicionar_genero(
-                cursor,
-                genero,
-            )
-        except Exception as e:
-            print(e)
-            con.close()
         else:
-            if messagebox.askyesno('Confirmação', 'Deseja adicionar o livro '+str(titulo.get())+'?'):
+            id_livro = cursor.fetchone()
+            if id_livro == None:
                 try:
-                    con.commit()
+                    conexao.query_adicionar_livro(
+                        cursor,
+                        titulo,
+                        autor,
+                        editora,
+                        publicacao,
+                        isbn
+                    )
                 except Exception as e:
                     print(e)
-                    messagebox.showerror(
-                        'Erro',
-                        'Erro na conexão à base de dados. O livro não foi adicionado.'
+                    con.close()
+                try:
+                    conexao.query_adicionar_genero(
+                        cursor,
+                        genero,
                     )
+                except Exception as e:
+                    print(e)
                     con.close()
                 else:
+                    if messagebox.askyesno('Confirmação', 'Deseja adicionar o livro '+str(titulo.get())+'?'):
+                        try:
+                            con.commit()
+                        except Exception as e:
+                            print(e)
+                            messagebox.showerror(
+                                'Erro',
+                                'Erro na conexão à base de dados. O livro não foi adicionado.'
+                            )
+                            con.close()
+                        else:
+                            con.close()
+                            lista_apagar = (titulo, autor, editora, publicacao, isbn, genero)
+                            for i in lista_apagar:
+                                i.delete(0, END)
+            else:
+                try:
+                    conexao.query_ativar_livro(
+                        cursor,
+                        id_livro,
+                        isbn
+                    )
+                except Exception as e:
+                    print(e)
+                else:
+                    con.commit()
+                    messagebox.showinfo(
+                        'Sucesso',
+                        'Livro adicionado com sucesso'
+                    )
                     con.close()
                     lista_apagar = (titulo, autor, editora, publicacao, isbn, genero)
                     for i in lista_apagar:
                         i.delete(0, END)
-                    janela.destroy()
+                
 
 
 # Função para remoção de livros
