@@ -1,6 +1,5 @@
-# main.py #
-# Função main #
-
+''' main.py
+Função main '''
 
 import mainwindow
 

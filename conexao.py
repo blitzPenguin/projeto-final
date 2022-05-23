@@ -1,13 +1,13 @@
-# conexao.py #
-# Funções e querys para conexão e operações entre o programa e a base de dados #
+'''
+conexao.py
+funções referentes à ligação à base de dados e queries efetuadas
+'''
 
 import mysql.connector
 
 
-# Conexão à base de dados #
-
-
 def connect():
+    '''conexão à base de dados'''
     return mysql.connector.connect(
         host="localhost",
         user="root",
@@ -84,7 +84,7 @@ def query_pesquisa(
         ON GENEROS.id = LIVROS_GENEROS.id_genero
         INNER JOIN REQUISITADO
         ON REQUISITADO.id = LIVROS.id_requisitado
-        WHERE 
+        WHERE
         LIVROS.ativo = 1
         AND
         (LIVROS.titulo LIKE \'%'''+entrada.get()+'''%\'
@@ -163,6 +163,19 @@ def query_listar_generos(
         '''
     )
     return cursor.fetchall()
+
+
+def query_listar_alunos(
+    cursor
+):
+    '''query para resgatar os dados relativos à lista de alunos'''
+    cursor.execute(
+        '''
+        SELECT ALUNOS.id, ALUNOS.nome, TURMAS.designacao FROM ALUNOS
+        INNER JOIN TURMAS
+        ON TURMAS.id = ALUNOS.id_turma
+        '''
+    )
 
 
 def query_adicionar_genero(

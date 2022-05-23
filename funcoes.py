@@ -1,11 +1,12 @@
-# funcoes.py #
-# Funções referentes ao funcionamento do programa #
+''' funcoes.py
+Funções referentes ao funcionamento do programa '''
 
-import conexao
-import requisicaodialog
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 import time
+import conexao
+import requisicaodialog
+
 
 
 # Funções de copiar, cortar e colar
@@ -29,15 +30,15 @@ def cortar(
     janela.clipboard_append(
         entrada.selection_get()
     )
-    if entrada.index(ANCHOR) < entrada.index(INSERT):
+    if entrada.index(tk.ANCHOR) < entrada.index(tk.INSERT):
         entrada.delete(
-            ANCHOR,
-            INSERT
+            tk.ANCHOR,
+            tk.INSERT
         )
-    elif entrada.index(INSERT) < entrada.index(ANCHOR):
+    elif entrada.index(tk.INSERT) < entrada.index(tk.ANCHOR):
         entrada.delete(
-            INSERT,
-            ANCHOR
+            tk.INSERT,
+            tk.ANCHOR
         )
 
 
@@ -46,7 +47,7 @@ def colar(
         entrada
 ):
     entrada.insert(
-        entrada.index(INSERT),
+        entrada.index(tk.INSERT),
         janela.clipboard_get()
     )
 
@@ -72,7 +73,7 @@ def requisicoes_pendentes(
     for i in fetch:
         lista.insert(
             '',
-            END,
+            tk.END,
             values=i)
     con.close()
 
@@ -98,7 +99,7 @@ def requisicoes_atrasadas(
     for i in fetch:
         lista.insert(
             '',
-            END,
+            tk.END,
             values=i
         )
     con.close()
@@ -127,7 +128,7 @@ def procurar_livro(
     for i in fetch:
         list.insert(
             '',
-            END,
+            tk.END,
             values=i
         )
     con.close()
@@ -245,7 +246,7 @@ def entrega_livro(
         lista,
         2
     )
-    if messagebox.askyesno('Confirmação', 'Deseja entregas o(s) seguinte(s) livro(s): ' + str(titulo)):
+    if messagebox.askyesno('Confirmação', 'Deseja entregas o(s) seguinte(s) livro(s): '+str(titulo)):
         try:
             con = conexao.connect()
             cursor = conexao.cursor(
@@ -338,6 +339,22 @@ def lista_anos():
     return anos
 
 
+def lista_alunos():
+    '''função para listar os alunos'''
+    try:
+        con = conexao.connect()
+        cursor = conexao.cursor(con)
+    except Exception as exception:
+        print(exception)
+    else:
+        conexao.query_listar_alunos(
+            cursor
+        )
+        resultado = cursor.fetchall()
+        con.close()
+        return resultado
+
+
 # Função para adição de livros
 
 
@@ -408,7 +425,7 @@ def adicionar_livro(
                             con.close()
                             lista_apagar = (titulo, autor, editora, publicacao, isbn, genero)
                             for i in lista_apagar:
-                                i.delete(0, END)
+                                i.delete(0, tk.END)
             else:
                 try:
                     conexao.query_ativar_livro(
@@ -427,8 +444,8 @@ def adicionar_livro(
                     con.close()
                     lista_apagar = (titulo, autor, editora, publicacao, isbn, genero)
                     for i in lista_apagar:
-                        i.delete(0, END)
-                
+                        i.delete(0, tk.END)
+
 
 
 # Função para remoção de livros

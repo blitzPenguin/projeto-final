@@ -2,8 +2,7 @@
 # Função referente à criação da janela de adição de livros à base de dados #
 
 
-from tkinter import *
-from tkcalendar import *
+import tkinter as tk
 from tkinter import ttk
 import funcoes
 
@@ -14,7 +13,7 @@ import funcoes
 def criar_janela():
 
     # Criar janela toplevel
-    janela_adicionar = Toplevel()
+    janela_adicionar = tk.Toplevel()
     janela_adicionar.title('Adicionar Livro')
     janela_adicionar.geometry(
         '600x400'
@@ -34,8 +33,8 @@ def criar_janela():
         padding=5
     )
     frame_principal.pack(
-        expand=TRUE,
-        fill=BOTH
+        expand=tk.TRUE,
+        fill=tk.BOTH
     )
 
     # Frame Introdução de Título
@@ -43,8 +42,8 @@ def criar_janela():
         frame_principal,
     )
     frame_titulo.pack(
-        expand=TRUE,
-        fill=BOTH
+        expand=tk.TRUE,
+        fill=tk.BOTH
     )
 
     # Introdução de Título
@@ -53,15 +52,15 @@ def criar_janela():
         text='Título: '
     )
     label_titulo.pack(
-        side=LEFT
+        side=tk.LEFT
     )
     entrada_titulo = ttk.Entry(
         frame_titulo
     )
     entrada_titulo.pack(
-        side=RIGHT,
-        expand=TRUE,
-        fill=X
+        side=tk.RIGHT,
+        expand=tk.TRUE,
+        fill=tk.X
     )
 
     # Frame Introdução de Autor
@@ -69,8 +68,8 @@ def criar_janela():
         frame_principal,
     )
     frame_autor.pack(
-        expand=TRUE,
-        fill=BOTH
+        expand=tk.TRUE,
+        fill=tk.BOTH
     )
 
     # Introdução de Autor
@@ -79,15 +78,15 @@ def criar_janela():
         text='Autor: '
     )
     label_autor.pack(
-        side=LEFT
+        side=tk.LEFT
     )
     entrada_autor = ttk.Entry(
         frame_autor
     )
     entrada_autor.pack(
-        side=RIGHT,
-        expand=TRUE,
-        fill=X
+        side=tk.RIGHT,
+        expand=tk.TRUE,
+        fill=tk.X
     )
 
     # Frame Introdução de Editora
@@ -95,8 +94,8 @@ def criar_janela():
         frame_principal,
     )
     frame_editora.pack(
-        expand=TRUE,
-        fill=BOTH
+        expand=tk.TRUE,
+        fill=tk.BOTH
     )
 
     # Introdução de Editora
@@ -105,15 +104,15 @@ def criar_janela():
         text='Editora: '
     )
     label_editora.pack(
-        side=LEFT
+        side=tk.LEFT
     )
     entrada_editora = ttk.Entry(
         frame_editora
     )
     entrada_editora.pack(
-        side=RIGHT,
-        expand=TRUE,
-        fill=X
+        side=tk.RIGHT,
+        expand=tk.TRUE,
+        fill=tk.X
     )
 
     # Frame Introdução de Publicação
@@ -121,8 +120,8 @@ def criar_janela():
         frame_principal,
     )
     frame_publicacao.pack(
-        expand=TRUE,
-        fill=BOTH
+        expand=tk.TRUE,
+        fill=tk.BOTH
     )
 
     # Introdução de Publicação
@@ -131,16 +130,16 @@ def criar_janela():
         text='Ano de Publicação: '
     )
     label_publicacao.pack(
-        side=LEFT
-    )   
+        side=tk.LEFT
+    )
     entrada_publicacao = ttk.Combobox(
         frame_publicacao,
     )
     entrada_publicacao['values'] = funcoes.lista_anos()
     entrada_publicacao.pack(
-        side=RIGHT,
-        expand=TRUE,
-        fill=X
+        side=tk.RIGHT,
+        expand=tk.TRUE,
+        fill=tk.X
     )
 
     # Frame Introdução de Genero
@@ -148,8 +147,8 @@ def criar_janela():
         frame_principal,
     )
     frame_genero.pack(
-        expand=TRUE,
-        fill=BOTH
+        expand=tk.TRUE,
+        fill=tk.BOTH
     )
 
     # Introdução de Genero
@@ -158,16 +157,16 @@ def criar_janela():
         text='Género: '
     )
     label_genero.pack(
-        side=LEFT
+        side=tk.LEFT
     )
     entrada_genero = ttk.Combobox(
         frame_genero
     )
     entrada_genero['values'] = funcoes.lista_generos()
     entrada_genero.pack(
-        side=RIGHT,
-        expand=TRUE,
-        fill=X
+        side=tk.RIGHT,
+        expand=tk.TRUE,
+        fill=tk.X
     )
 
     # Frame isbn
@@ -175,8 +174,8 @@ def criar_janela():
         frame_principal,
     )
     frame_isbn.pack(
-        expand=TRUE,
-        fill=BOTH
+        expand=tk.TRUE,
+        fill=tk.BOTH
     )
 
     # Introdução do isbn
@@ -185,15 +184,15 @@ def criar_janela():
         text='ISBN: '
     )
     label_isbn.pack(
-        side=LEFT
+        side=tk.LEFT
     )
     entrada_isbn = ttk.Entry(
         frame_isbn
     )
     entrada_isbn.pack(
-        side=RIGHT,
-        expand=TRUE,
-        fill=X
+        side=tk.RIGHT,
+        expand=tk.TRUE,
+        fill=tk.X
     )
 
     # Frame Botões
@@ -201,9 +200,9 @@ def criar_janela():
         frame_principal,
     )
     frame_botoes.pack(
-        anchor=CENTER,
-        side=BOTTOM,
-        fill=X
+        anchor=tk.CENTER,
+        side=tk.BOTTOM,
+        fill=tk.X
     )
     for i in range(2):
         frame_botoes.grid_columnconfigure(
@@ -240,7 +239,7 @@ def criar_janela():
     )
 
     # Menu Botão Lado Direito Rato
-    menu_lado_direito_titulo = Menu(
+    menu_lado_direito_titulo = tk.Menu(
         janela_adicionar,
         tearoff=0
     )
@@ -263,7 +262,7 @@ def criar_janela():
         finally:
             menu_lado_direito_titulo.grab_release()
 
-    menu_lado_direito_autor = Menu(
+    menu_lado_direito_autor = tk.Menu(
         janela_adicionar,
         tearoff=0
     )
@@ -286,7 +285,7 @@ def criar_janela():
         finally:
             menu_lado_direito_autor.grab_release()
 
-    menu_lado_direito_editora = Menu(
+    menu_lado_direito_editora = tk.Menu(
         janela_adicionar,
         tearoff=0
     )
@@ -309,7 +308,7 @@ def criar_janela():
         finally:
             menu_lado_direito_editora.grab_release()
 
-    menu_lado_direito_publicacao = Menu(
+    menu_lado_direito_publicacao = tk.Menu(
         janela_adicionar,
         tearoff=0
     )
@@ -332,7 +331,7 @@ def criar_janela():
         finally:
             menu_lado_direito_publicacao.grab_release()
 
-    menu_lado_direito_genero = Menu(
+    menu_lado_direito_genero = tk.Menu(
         janela_adicionar,
         tearoff=0
     )
@@ -355,7 +354,7 @@ def criar_janela():
         finally:
             menu_lado_direito_genero.grab_release()
 
-    menu_lado_direito_isbn = Menu(
+    menu_lado_direito_isbn = tk.Menu(
         janela_adicionar,
         tearoff=0
     )
