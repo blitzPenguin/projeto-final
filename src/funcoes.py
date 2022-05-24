@@ -315,7 +315,10 @@ def lista_generos():
             message='Erro de conexão à base de dados'
         )
     else:
-        resultado = conexao.query_listar_generos(cursor)
+        conexao.query_listar_generos(
+            cursor
+        )
+        resultado = cursor.fetchall()
         con.close()
         return resultado
 

@@ -161,7 +161,6 @@ def query_listar_generos(
         SELECT GENEROS.designacao from GENEROS
         '''
     )
-    return cursor.fetchall()
 
 
 def query_listar_alunos(
