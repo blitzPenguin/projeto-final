@@ -6,6 +6,7 @@ Função referente à criação da janela principal'''
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import themed_tk
+import os
 import addbookwindow
 import funcoes
 import removewindow
@@ -154,8 +155,11 @@ def criar_janela():
     )
 
     # Label logótipo
+    filepath = os.path.abspath(__file__)
+    filedir = os.path.dirname(filepath)
+    imagepath = os.path.join(filedir, 'imagens', 'logo4.png')
     logotipo = tk.PhotoImage(
-        file='./src/imagens/logo4.png'
+        file=imagepath
     )
     label_logotipo = ttk.Label(
         frame_logotipo,
