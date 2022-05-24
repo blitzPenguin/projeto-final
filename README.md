@@ -1,5 +1,7 @@
 # Projeto final
 
+Por João Oliveira
+
 ## Introdução
 
 Projeto final para curso EFA PRO de Programador Informático.
@@ -20,3 +22,7 @@ A aplicação seria utilizada pela funcionária de uma dada escola para colmatar
 - Visualização da disponibilidade de qualquer livro
 - Adição de livros à base de dados
 - Desativação de entradas de livros na base de dados, caso o livro se torne indisponível
+
+## Requisitos
+
+Para o funcionamento do programa é necessário previamente criar a base de dados derivada do ficheiro .sql na pasta SQL.
