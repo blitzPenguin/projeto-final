@@ -3,7 +3,7 @@ mainwindow.py
 Função referente à criação da janela principal'''
 
 
-from tkinter import *
+import tkinter as tk
 from tkinter import ttk
 from ttkthemes import themed_tk
 import addbookwindow
@@ -32,22 +32,22 @@ def criar_janela():
             '1024x768'
         )
     janela.resizable(
-        width=TRUE,
-        height=TRUE
+        width=tk.TRUE,
+        height=tk.TRUE
     )
 
     # Barra Topo
-    barra_menu = Menu(
+    barra_menu = tk.Menu(
         janela
     )
     janela.config(
         menu=barra_menu
     )
-    menu_ficheiro = Menu(
+    menu_ficheiro = tk.Menu(
         barra_menu,
         tearoff=0,
     )
-    menu_editar = Menu(
+    menu_editar = tk.Menu(
         barra_menu,
         tearoff=0,
     )
@@ -94,7 +94,7 @@ def criar_janela():
     )
 
     # Menu Botão Lado Direito Rato
-    menu_lado_direito = Menu(
+    menu_lado_direito = tk.Menu(
         janela,
         tearoff=0
     )
@@ -137,9 +137,9 @@ def criar_janela():
         padding=5
     )
     frame_principal.pack(
-        fill=BOTH,
-        expand=TRUE,
-        anchor=CENTER
+        fill=tk.BOTH,
+        expand=tk.TRUE,
+        anchor=tk.CENTER
     )
 
     # Frame Logotipo
@@ -147,25 +147,25 @@ def criar_janela():
         frame_principal,
     )
     frame_logotipo.pack(
-        side=TOP,
-        expand=TRUE,
-        fill=BOTH,
-        anchor=CENTER
+        side=tk.TOP,
+        expand=tk.TRUE,
+        fill=tk.BOTH,
+        anchor=tk.CENTER
     )
 
     # Label logótipo
-    logotipo = PhotoImage(
+    logotipo = tk.PhotoImage(
         file='./src/imagens/logo4.png'
     )
     label_logotipo = ttk.Label(
         frame_logotipo,
         image=logotipo,
-        anchor=CENTER
+        anchor=tk.CENTER
     )
     label_logotipo.pack(
-        side=TOP,
-        expand=TRUE,
-        fill=BOTH,
+        side=tk.TOP,
+        expand=tk.TRUE,
+        fill=tk.BOTH,
     )
 
     # Frame Lista Entregas Pendentes / Atrasadas
@@ -173,9 +173,9 @@ def criar_janela():
         frame_principal,
     )
     frame_pendentes.pack(
-        expand=TRUE,
-        fill=BOTH,
-        anchor=CENTER
+        expand=tk.TRUE,
+        fill=tk.BOTH,
+        anchor=tk.CENTER
     )
     for i in range(2):
         frame_pendentes.grid_columnconfigure(
@@ -191,7 +191,7 @@ def criar_janela():
     label_pendentes.grid(
         row=0,
         column=0,
-        sticky=N
+        sticky=tk.N
     )
     colunas = (
         'Aluno',
@@ -204,7 +204,7 @@ def criar_janela():
         columns=colunas,
         show='headings',
         height=5,
-        selectmode=EXTENDED
+        selectmode=tk.EXTENDED
     )
     for i in colunas:
         lista_pendentes.heading(
@@ -214,12 +214,12 @@ def criar_janela():
         lista_pendentes.column(
             i,
             width=10,
-            anchor=CENTER
+            anchor=tk.CENTER
         )
     lista_pendentes.grid(
         row=1,
         column=0,
-        sticky=NSEW
+        sticky=tk.NSEW
     )
     funcoes.requisicoes_pendentes(
         lista_pendentes
@@ -233,14 +233,14 @@ def criar_janela():
     label_atrasadas.grid(
         row=0,
         column=1,
-        sticky=N
+        sticky=tk.N
     )
     lista_atrasadas = ttk.Treeview(
         frame_pendentes,
         columns=colunas,
         show='headings',
         height=5,
-        selectmode=EXTENDED
+        selectmode=tk.EXTENDED
     )
     for i in colunas:
         lista_atrasadas.heading(
@@ -250,12 +250,12 @@ def criar_janela():
         lista_atrasadas.column(
             i,
             width=10,
-            anchor=CENTER
+            anchor=tk.CENTER
         )
     lista_atrasadas.grid(
         row=1,
         column=1,
-        sticky=NSEW
+        sticky=tk.NSEW
     )
     funcoes.requisicoes_atrasadas(
         lista_atrasadas
@@ -266,9 +266,9 @@ def criar_janela():
         frame_principal,
     )
     frame_pesquisa.pack(
-        fill=BOTH,
-        expand=TRUE,
-        anchor=CENTER
+        fill=tk.BOTH,
+        expand=tk.TRUE,
+        anchor=tk.CENTER
     )
 
     # Entrada de Procuras
@@ -277,8 +277,8 @@ def criar_janela():
         text='Pesquisa de livros'
     )
     label_pesquisa.pack(
-        side=TOP,
-        anchor=N
+        side=tk.TOP,
+        anchor=tk.N
     )
     entrada_pesquisa = ttk.Entry(
         frame_pesquisa,
@@ -293,19 +293,19 @@ def criar_janela():
         padding=5
     )
     entrada_pesquisa.pack(
-        side=LEFT,
-        anchor=NW,
-        fill=X,
-        expand=TRUE,
+        side=tk.LEFT,
+        anchor=tk.NW,
+        fill=tk.X,
+        expand=tk.TRUE,
     )
     entrada_pesquisa.bind(
         "<Button-3>",
         botao_direito
     )
     botao_pesquisa.pack(
-        side=LEFT,
-        anchor=NE,
-        expand=FALSE,
+        side=tk.LEFT,
+        anchor=tk.NE,
+        expand=tk.FALSE,
     )
 
     # Frame Lista de Procuras
@@ -313,9 +313,9 @@ def criar_janela():
         frame_principal,
     )
     frame_pesquisa_lista.pack(
-        fill=BOTH,
-        expand=TRUE,
-        anchor=CENTER
+        fill=tk.BOTH,
+        expand=tk.TRUE,
+        anchor=tk.CENTER
     )
 
     # Lista de Procuras
@@ -333,7 +333,7 @@ def criar_janela():
         columns=colunas,
         show='headings',
         height=5,
-        selectmode=EXTENDED,
+        selectmode=tk.EXTENDED,
     )
     for i in colunas:
         lista_pesquisa.heading(
@@ -346,7 +346,7 @@ def criar_janela():
             anchor='center'
         )
     lista_pesquisa.pack(
-        fill=X
+        fill=tk.X
     )
 
     # Frame Botões
@@ -354,10 +354,10 @@ def criar_janela():
         frame_principal,
     )
     frame_botoes.pack(
-        anchor=CENTER,
-        side=BOTTOM,
-        fill=BOTH,
-        expand=TRUE
+        anchor=tk.CENTER,
+        side=tk.BOTTOM,
+        fill=tk.BOTH,
+        expand=tk.TRUE
     )
     for i in range(2):
         frame_botoes.grid_columnconfigure(
