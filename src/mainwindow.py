@@ -66,7 +66,7 @@ def criar_janela():
     )
     menu_ficheiro.add_command(
         label='Sair',
-        command=janela.destroy
+        command=quit,
     )
     barra_menu.add_cascade(
         label='Editar',
