@@ -25,4 +25,4 @@ A aplicação seria utilizada pela funcionária de uma dada escola para colmatar
 
 ## Requisitos
 
-Para o funcionamento do programa é necessário previamente criar a base de dados derivada do ficheiro .sql na pasta SQL.
+Para o funcionamento do programa é necessário previamente criar a base de dados derivada do ficheiro .sql na pasta SQL através do PHPMyAdmin em localhost.
