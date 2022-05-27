@@ -10,8 +10,8 @@ Trata-se de um software de gestão de uma biblioteca escolar com gestão dos liv
 
 ## Tecnologias
 
-Este projeto foi criado em Python com recurso ao tkinter para a construção de interface gráfica.
-Utilizei o PHPMyAdmin para a construção da base de dados referente ao programa.
+Este projeto foi criado em `Python` com recurso ao `tkinter` para a construção de interface gráfica.
+Utilizei o `PHPMyAdmin` para a construção da base de dados referente ao programa.
 
 ## Utilização
 
@@ -25,4 +25,10 @@ A aplicação seria utilizada pela funcionária de uma dada escola para colmatar
 
 ## Requisitos
 
-Para o funcionamento do programa é necessário previamente criar a base de dados derivada do ficheiro .sql na pasta SQL através do PHPMyAdmin em localhost.
+Para o funcionamento do programa é necessário previamente criar a base de dados derivada do ficheiro .sql na pasta `/src/SQL` através do `PHPMyAdmin` em localhost.
+
+## Execução
+
+Este projeto contém dois executáveis, para `Windows` e `Linux`.
+
+Estes executáveis foram criados com uso do módulo `PyInstaller`.
