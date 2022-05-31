@@ -70,12 +70,11 @@ def query_req_atrasadas(
 
 def query_pesquisa(
         cursor,
-        entrada
+        lista_pesquisa
 ):
     cursor.execute(
         '''
-        SELECT LIVROS.titulo, LIVROS.autor, LIVROS.editora, LIVROS.data_publicacao, GENEROS.designacao, LIVROS.isbn,
-        REQUISITADO.designacao, LIVROS.id
+        SELECT LIVROS.titulo, LIVROS.autor, LIVROS.editora, LIVROS.data_publicacao, GENEROS.designacao, LIVROS.isbn, REQUISITADO.designacao, LIVROS.id
         FROM LIVROS
         INNER JOIN LIVROS_GENEROS
         ON LIVROS_GENEROS.id_livro = LIVROS.id
@@ -86,12 +85,12 @@ def query_pesquisa(
         WHERE
         LIVROS.ativo = 1
         AND
-        (LIVROS.titulo LIKE \'%'''+entrada.get()+'''%\'
-        OR LIVROS.autor LIKE \'%'''+entrada.get()+'''%\'
-        OR LIVROS.editora LIKE \'%'''+entrada.get()+'''%\'
-        OR LIVROS.data_publicacao LIKE \'%'''+entrada.get()+'''%\'
-        OR GENEROS.designacao LIKE \'%'''+entrada.get()+'''%\'
-        OR LIVROS.isbn LIKE \''''+entrada.get()+'''%\')
+        (LIVROS.titulo LIKE \'%'''+lista_pesquisa+'''%\'
+        OR LIVROS.autor LIKE \'%'''+lista_pesquisa+'''%\'
+        OR LIVROS.editora LIKE \'%'''+lista_pesquisa+'''%\'
+        OR LIVROS.data_publicacao LIKE \'%'''+lista_pesquisa+'''%\'
+        OR GENEROS.designacao LIKE \'%'''+lista_pesquisa+'''%\'
+        OR LIVROS.isbn LIKE \''''+lista_pesquisa+'''%\')
         ORDER BY LIVROS.titulo ASC
         '''
     )
@@ -183,15 +182,16 @@ def query_adicionar_genero(
     cursor.execute(
         '''
         SELECT GENEROS.id FROM GENEROS
-        WHERE GENEROS.designacao like \'''' + genero.get() + '''\'
+        WHERE GENEROS.designacao like \'''' + genero + '''\'
         '''
     )
     id_genero = cursor.fetchone()
+    print("id genero: ", id_genero)
     if id_genero == None:
         cursor.execute(
             '''
             INSERT INTO GENEROS (designacao)
-            VALUES (\'''' + genero.get() + '''\')
+            VALUES (\'''' + genero + '''\')
             '''
         )
         cursor.execute(
@@ -206,6 +206,7 @@ def query_adicionar_genero(
             '''
         )
         livro = cursor.fetchone()
+        print("livro: ", livro)
         cursor.execute(
             '''
             INSERT INTO LIVROS_GENEROS (id_livro, id_genero)

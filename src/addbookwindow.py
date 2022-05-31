@@ -162,11 +162,49 @@ def criar_janela():
     )
     entrada_genero['values'] = funcoes.lista_generos()
     entrada_genero.pack(
-        side=tk.RIGHT,
+        side=tk.LEFT,
         expand=tk.TRUE,
         fill=tk.X
     )
-
+    lista_genero = []
+    botao_adicionar_genero = ttk.Button(
+        frame_genero,
+        text='+',
+        width=1,
+        command=lambda: funcoes.adicionar_lista_generos(
+            lista_genero,
+            entrada_genero,
+            label_generos_adicionados
+        )
+    )
+    botao_adicionar_genero.pack(
+        side=tk.RIGHT
+    )
+    
+    # Frame Adicionar Género
+    
+    frame_adicionar_generos = ttk.Frame(
+        frame_principal
+    )
+    frame_adicionar_generos.pack(
+        expand=tk.TRUE,
+        fill=tk.BOTH
+    )
+    label_adicionar_genero = ttk.Label(
+        frame_adicionar_generos,
+        text='Géneros Adicionados: '
+    )
+    label_adicionar_genero.pack(
+        side=tk.LEFT,
+    )
+    label_generos_adicionados = ttk.Label(
+        frame_adicionar_generos,
+        text=lista_genero
+    )
+    label_generos_adicionados.pack(
+        side=tk.LEFT
+    )
+    
     # Frame isbn
     frame_isbn = ttk.Frame(
         frame_principal,
@@ -213,11 +251,11 @@ def criar_janela():
         frame_botoes,
         text='Adicionar Livro',
         command=lambda: funcoes.adicionar_livro(
-            janela_adicionar,
             entrada_titulo,
             entrada_autor,
             entrada_editora,
             entrada_publicacao,
+            lista_genero,
             entrada_genero,
             entrada_isbn
         )

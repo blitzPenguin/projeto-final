@@ -106,25 +106,29 @@ def procurar_livro(
         list
 ):
     '''Função de pesquisa de livros'''
-    con = conexao.connect()
-    cursor = conexao.cursor(
-        con
-    )
-    conexao.query_pesquisa(
-        cursor,
-        entrada
-    )
-    fetch = cursor.fetchall()
     for i in list.get_children():
         list.delete(
             i
         )
-    for i in fetch:
-        list.insert(
-            '',
-            tk.END,
-            values=i
+    con = conexao.connect()
+    cursor = conexao.cursor(
+        con
+    )
+    lista_pesquisa = entrada.get()
+    lista_pesquisa = lista_pesquisa.split(',')
+    for i in lista_pesquisa:
+        conexao.query_pesquisa(
+            cursor,
+            i
         )
+        fetch = cursor.fetchall()
+        print(fetch)
+        for i in fetch:
+            list.insert(
+                '',
+                tk.END,
+                values=i
+            )
     con.close()
 
 
@@ -350,18 +354,34 @@ def lista_alunos():
         return resultado
 
 
+# Adicionar itens à lista de géneros a adicionar
+
+
+def adicionar_lista_generos(
+    lista_genero,
+    genero,
+    label_generos_adicionados
+):
+    lista_genero.append(genero.get())
+    label_generos_adicionados.configure(
+        text=lista_genero
+    )
+    
+
+
 # Função para adição de livros
 
 
 def adicionar_livro(
-        janela,
         titulo,
         autor,
         editora,
         publicacao,
+        lista,
         genero,
         isbn
 ):
+    print(lista)
     try:
         con = conexao.connect()
         cursor = conexao.cursor(con)
@@ -397,11 +417,13 @@ def adicionar_livro(
                 except Exception as e:
                     print(e)
                     con.close()
+                print(lista)
                 try:
-                    conexao.query_adicionar_genero(
-                        cursor,
-                        genero,
-                    )
+                    for i in lista:
+                        conexao.query_adicionar_genero(
+                            cursor,
+                            i,
+                        )
                 except Exception as e:
                     print(e)
                     con.close()
