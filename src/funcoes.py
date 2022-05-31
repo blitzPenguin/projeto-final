@@ -103,11 +103,11 @@ def requisicoes_atrasadas(
 
 def procurar_livro(
         entrada,
-        list
+        lista
 ):
     '''Função de pesquisa de livros'''
-    for i in list.get_children():
-        list.delete(
+    for i in lista.get_children():
+        lista.delete(
             i
         )
     con = conexao.connect()
@@ -116,19 +116,32 @@ def procurar_livro(
     )
     lista_pesquisa = entrada.get()
     lista_pesquisa = lista_pesquisa.split(',')
+    lista_resultados = []
     for i in lista_pesquisa:
         conexao.query_pesquisa(
             cursor,
             i
         )
-        fetch = cursor.fetchall()
-        print(fetch)
-        for i in fetch:
-            list.insert(
-                '',
-                tk.END,
-                values=i
-            )
+        lista_resultados = lista_resultados + cursor.fetchall()
+    for i in lista_resultados:
+        print(i)
+    for i in range(len(lista_resultados)):
+        lista_resultados[i] = list(lista_resultados[i])
+    for i in range(len(lista_resultados)):
+        if i > 0:
+            j = 0
+            while j < i:
+                if lista_resultados[i][0] == lista_resultados[j][0]:
+                    lista_resultados[i][4] = lista_resultados[j][4] + ', ' + lista_resultados[i][4]
+                    lista_resultados[j][4] = ''
+                j+=1
+    for i in lista_resultados:
+        if i[4] != '':
+            lista.insert(
+            '',
+            tk.END,
+            values=i
+    )
     con.close()
 
 
