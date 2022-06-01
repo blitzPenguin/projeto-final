@@ -133,10 +133,10 @@ def procurar_livro(
             while j < i:
                 if lista_resultados[i][0] == lista_resultados[j][0]:
                     lista_resultados[i][4] = lista_resultados[j][4] + ', ' + lista_resultados[i][4]
-                    lista_resultados[j][4] = ''
+                    lista_resultados[j] = ['']
                 j+=1
     for i in lista_resultados:
-        if i[4] != '':
+        if i != ['']:
             lista.insert(
             '',
             tk.END,
