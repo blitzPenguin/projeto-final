@@ -155,7 +155,7 @@ def criar_janela():
     )
 
     # Label logótipo
-    imagepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'imagens', 'logo4.png')
+    imagepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'imagens', 'logotipo.png')
     logotipo = tk.PhotoImage(
         file=imagepath
     )
