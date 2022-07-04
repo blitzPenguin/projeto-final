@@ -79,6 +79,8 @@ ALTER TABLE REQUISICOES_DESC
 	ADD CONSTRAINT FK_REQHEAD_REQDESC FOREIGN KEY(id_requisicao) REFERENCES REQUISICOES_HEADER(id),
 	ADD CONSTRAINT FK_LIVROS_REQDESC FOREIGN KEY(id_livro) REFERENCES LIVROS(id);
 
+/* Introdução de dados */
+
 INSERT INTO TURMAS (designacao) VALUES	('9ºA'),
 										('8ºB');
 
@@ -89,4 +91,24 @@ INSERT INTO REQUISITADO (designacao) VALUES	('Não Requisitado'),
 											('Requisitado');
 
 INSERT INTO GENEROS (designacao) VALUES	('Terror'),
-										('Comedia');
+										('Comedia'),
+                                        ('Drama'),
+                                        ('Romance'),
+                                        ('Fantasia');
+
+INSERT INTO LIVROS (isbn, titulo, autor, editora, data_publicacao, id_requisitado) VALUES
+    (123456789, 'O Senhor dos Anéis', 'J.R.R. Tolkien', 'Minha Biblioteca', 1954, 2),
+    (234567891, 'A Arte da Guerra', 'Sun Tzu', 'Editora chinas', 1980, 1),
+    (345678912, 'Os Maias', 'Eça de Queiroz', 'Porto Editora', 1985, 1),
+    (456789123, 'Harry Potter e a Pedra Filosofal', 'J.K. Rowling', 'Editorial Presença', 1997, 1);
+
+INSERT INTO LIVROS_GENEROS (id_livro, id_genero) VALUES (1, 1),
+                                                        (1, 5),
+                                                        (2, 2),
+                                                        (3, 3),
+                                                        (3, 4),
+                                                        (4, 4);
+
+INSERT INTO REQUISICOES_HEADER (id_aluno, data_limite) VALUES (1, '2020-01-01');
+
+INSERT INTO REQUISICOES_DESC (id_requisicao, id_livro, devolvido) VALUES (1, 1, 0);
