@@ -25,11 +25,11 @@ A aplicação seria utilizada pela funcionária de uma dada escola para colmatar
 
 ## Screenshots
 
-# Programa
+### Programa
 
 ![ScreenShot](src/imagens/screenshot1.png)
 
-# Base de dados
+### Base de dados
 
 ![ScreenShot](src/imagens/screenshot2.png)
 
