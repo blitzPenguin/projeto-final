@@ -23,6 +23,16 @@ A aplicação seria utilizada pela funcionária de uma dada escola para colmatar
 - Adição de livros à base de dados
 - Desativação de entradas de livros na base de dados, caso o livro se torne indisponível
 
+## Screenshots
+
+# Programa
+
+![ScreenShot](src/imagens/screenshot1.png)
+
+# Base de dados
+
+![ScreenShot](src/imagens/screenshot2.png)
+
 ## Requisitos
 
 Para o funcionamento do programa é necessário previamente criar a base de dados derivada do ficheiro .sql na pasta `/src/SQL` através do `PHPMyAdmin` em localhost.
